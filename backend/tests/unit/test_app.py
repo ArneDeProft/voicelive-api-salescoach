@@ -235,6 +235,7 @@ class TestFlaskApp:
         from src.app import _perform_conversation_analysis  # pylint: disable=C0415
 
         assert callable(_perform_conversation_analysis)
+
     @patch("src.app.agent_manager")
     @patch("src.app.scenario_manager")
     def test_create_foundry_agent_success(self, mock_scenario_manager, mock_agent_manager):

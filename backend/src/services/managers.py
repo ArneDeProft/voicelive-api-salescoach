@@ -211,7 +211,7 @@ CRITICAL INTERACTION GUIDELINES:
         # Check if this is a foundry agent scenario
         is_foundry_agent = scenario_data.get("isFoundryAgent", False)
         foundry_config = scenario_data.get("foundryConfig", {})
-        
+
         scenario_instructions = scenario_data.get("messages", [{}])[0].get("content", "")
         combined_instructions = scenario_instructions + self.BASE_INSTRUCTIONS
 
@@ -222,7 +222,7 @@ CRITICAL INTERACTION GUIDELINES:
         # Handle foundry agent scenarios
         if is_foundry_agent and foundry_config.get("requiresCustomAgent", False):
             return self._create_foundry_agent(scenario_id, combined_instructions, model_name, temperature, max_tokens, foundry_config)
-        
+
         if self.use_azure_ai_agents and self.project_client:
             return self._create_azure_agent(scenario_id, combined_instructions, model_name, temperature, max_tokens)
         return self._create_local_agent(scenario_id, combined_instructions, model_name, temperature, max_tokens)
@@ -313,7 +313,7 @@ CRITICAL INTERACTION GUIDELINES:
         """Create a foundry agent configuration for custom Azure AI Foundry agents."""
         try:
             agent_connection_type = foundry_config.get("agentConnectionType", "foundry")
-            
+
             # Check if we have a project client for foundry agents
             if self.use_azure_ai_agents and self.project_client and agent_connection_type == "foundry":
                 # For now, create using Azure AI Agent Service but mark as foundry type
@@ -323,7 +323,7 @@ CRITICAL INTERACTION GUIDELINES:
                 # Fallback to local agent configuration
                 logger.info("Creating foundry agent configuration (local fallback) for scenario: %s", scenario_id)
                 agent_id = self._generate_foundry_agent_id(scenario_id)
-                
+
                 self.agents[agent_id] = self._create_foundry_agent_config(
                     scenario_id=scenario_id,
                     agent_id=agent_id,
@@ -333,7 +333,7 @@ CRITICAL INTERACTION GUIDELINES:
                     max_tokens=max_tokens,
                     foundry_config=foundry_config,
                 )
-                
+
                 logger.info("Created foundry agent configuration: %s", agent_id)
                 return agent_id
 
@@ -402,14 +402,14 @@ CRITICAL INTERACTION GUIDELINES:
             temperature=temperature,
             max_tokens=max_tokens,
         )
-        
+
         # Add foundry-specific configuration
         base_config.update({
             "is_foundry_agent": True,
             "foundry_config": foundry_config,
             "agent_connection_type": foundry_config.get("agentConnectionType", "foundry"),
         })
-        
+
         return base_config
 
     def get_agent(self, agent_id: str) -> Optional[Dict[str, Any]]:

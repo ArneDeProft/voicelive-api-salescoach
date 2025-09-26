@@ -23,7 +23,7 @@ from src.services.managers import AgentManager, ScenarioManager
 from src.services.websocket_handler import VoiceProxyHandler
 
 # Constants
-STATIC_FOLDER = "../static"
+STATIC_FOLDER = "../../static"
 STATIC_URL_PATH = ""
 INDEX_FILE = "index.html"
 AUDIO_PROCESSOR_FILE = "audio-processor.js"
