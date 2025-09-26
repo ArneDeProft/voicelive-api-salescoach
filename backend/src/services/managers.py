@@ -208,6 +208,10 @@ CRITICAL INTERACTION GUIDELINES:
             Exception: If agent creation fails
         """
 
+        # Check if this is a foundry agent scenario
+        is_foundry_agent = scenario_data.get("isFoundryAgent", False)
+        foundry_config = scenario_data.get("foundryConfig", {})
+        
         scenario_instructions = scenario_data.get("messages", [{}])[0].get("content", "")
         combined_instructions = scenario_instructions + self.BASE_INSTRUCTIONS
 
@@ -215,6 +219,10 @@ CRITICAL INTERACTION GUIDELINES:
         temperature = scenario_data.get("modelParameters", {}).get("temperature", 0.7)
         max_tokens = scenario_data.get("modelParameters", {}).get("max_tokens", 2000)
 
+        # Handle foundry agent scenarios
+        if is_foundry_agent and foundry_config.get("requiresCustomAgent", False):
+            return self._create_foundry_agent(scenario_id, combined_instructions, model_name, temperature, max_tokens, foundry_config)
+        
         if self.use_azure_ai_agents and self.project_client:
             return self._create_azure_agent(scenario_id, combined_instructions, model_name, temperature, max_tokens)
         return self._create_local_agent(scenario_id, combined_instructions, model_name, temperature, max_tokens)
@@ -293,6 +301,46 @@ CRITICAL INTERACTION GUIDELINES:
             logger.error("Error creating local agent: %s", e)
             raise
 
+    def _create_foundry_agent(
+        self,
+        scenario_id: str,
+        instructions: str,
+        model: str,
+        temperature: float,
+        max_tokens: int,
+        foundry_config: Dict[str, Any],
+    ) -> str:
+        """Create a foundry agent configuration for custom Azure AI Foundry agents."""
+        try:
+            agent_connection_type = foundry_config.get("agentConnectionType", "foundry")
+            
+            # Check if we have a project client for foundry agents
+            if self.use_azure_ai_agents and self.project_client and agent_connection_type == "foundry":
+                # For now, create using Azure AI Agent Service but mark as foundry type
+                logger.info("Creating foundry agent using Azure AI Agent Service for scenario: %s", scenario_id)
+                return self._create_azure_agent(scenario_id, instructions, model, temperature, max_tokens)
+            else:
+                # Fallback to local agent configuration
+                logger.info("Creating foundry agent configuration (local fallback) for scenario: %s", scenario_id)
+                agent_id = self._generate_foundry_agent_id(scenario_id)
+                
+                self.agents[agent_id] = self._create_foundry_agent_config(
+                    scenario_id=scenario_id,
+                    agent_id=agent_id,
+                    instructions=instructions,
+                    model=model,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    foundry_config=foundry_config,
+                )
+                
+                logger.info("Created foundry agent configuration: %s", agent_id)
+                return agent_id
+
+        except Exception as e:
+            logger.error("Error creating foundry agent: %s", e)
+            raise
+
     def _generate_agent_name(self, scenario_id: str) -> str:
         """Generate a unique agent name."""
         short_uuid = uuid.uuid4().hex[:UUID_SHORT_LENGTH]
@@ -302,6 +350,11 @@ CRITICAL INTERACTION GUIDELINES:
         """Generate a unique local agent ID."""
         short_uuid = uuid.uuid4().hex[:UUID_SHORT_LENGTH]
         return f"{AGENT_ID_PREFIX}-{scenario_id}-{short_uuid}"
+
+    def _generate_foundry_agent_id(self, scenario_id: str) -> str:
+        """Generate a unique foundry agent ID."""
+        short_uuid = uuid.uuid4().hex[:UUID_SHORT_LENGTH]
+        return f"foundry-agent-{scenario_id}-{short_uuid}"
 
     def _create_agent_config(
         self,
@@ -328,6 +381,36 @@ CRITICAL INTERACTION GUIDELINES:
             result["azure_agent_id"] = agent_id
 
         return result
+
+    def _create_foundry_agent_config(
+        self,
+        scenario_id: str,
+        agent_id: str,
+        instructions: str,
+        model: str,
+        temperature: float,
+        max_tokens: int,
+        foundry_config: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """Create foundry agent configuration."""
+        base_config = self._create_agent_config(
+            scenario_id=scenario_id,
+            agent_id=agent_id,
+            is_azure_agent=False,
+            instructions=instructions,
+            model=model,
+            temperature=temperature,
+            max_tokens=max_tokens,
+        )
+        
+        # Add foundry-specific configuration
+        base_config.update({
+            "is_foundry_agent": True,
+            "foundry_config": foundry_config,
+            "agent_connection_type": foundry_config.get("agentConnectionType", "foundry"),
+        })
+        
+        return base_config
 
     def get_agent(self, agent_id: str) -> Optional[Dict[str, Any]]:
         """

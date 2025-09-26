@@ -1,0 +1,40 @@
+name: Custom Foundry Agent Connection
+description: Connect to a custom Azure AI Foundry agent for personalized training scenarios
+model: gpt-4o
+modelParameters:
+  temperature: 0.7
+  max_tokens: 2000
+isFoundryAgent: true
+foundryConfig:
+  requiresCustomAgent: true
+  agentConnectionType: "foundry"
+messages:
+  - role: system
+    content: |
+      This scenario connects to a custom Azure AI Foundry agent. The agent will be configured 
+      based on your specific training requirements and use case.
+      
+      FOUNDRY AGENT CONNECTION:
+      - This scenario requires a pre-configured Azure AI Foundry agent
+      - The agent should be properly configured with appropriate instructions
+      - Ensure the agent has the necessary permissions and setup
+      
+      BEHAVIORAL GUIDELINES (For Custom Agent):
+      - Follow the custom instructions provided in your Foundry agent configuration
+      - Maintain consistency with your agent's defined persona and role
+      - Respond appropriately to the training scenario context
+      - Provide realistic and engaging interactions for sales training
+      
+      If no custom agent is configured, this scenario will fall back to a general sales training agent.
+  - role: user
+    content: "{{user_message}}"
+testData:
+  - user_message: "Hello, I'd like to begin the training session with the custom Foundry agent."
+    expected: "Should respond according to the custom Foundry agent's configuration and training objectives"
+evaluators:
+  - name: Custom agent responsiveness
+    description: Agent responds appropriately based on its custom configuration
+  - name: Training scenario alignment
+    description: Responses align with the intended training objectives
+  - name: Foundry integration
+    description: Successfully utilizes Azure AI Foundry agent capabilities
