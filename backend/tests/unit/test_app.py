@@ -235,3 +235,30 @@ class TestFlaskApp:
         from src.app import _perform_conversation_analysis  # pylint: disable=C0415
 
         assert callable(_perform_conversation_analysis)
+
+    @patch("src.app.agent_manager")
+    @patch("src.app.scenario_manager")
+    def test_create_foundry_agent_success(self, mock_scenario_manager, mock_agent_manager):
+        """Test successful foundry agent creation through API."""
+        mock_foundry_scenario = {
+            "name": "Custom Foundry Agent Connection",
+            "isFoundryAgent": True,
+            "foundryConfig": {
+                "requiresCustomAgent": True,
+                "agentConnectionType": "foundry"
+            },
+            "messages": [{"content": "Foundry agent instructions"}]
+        }
+        mock_scenario_manager.get_scenario.return_value = mock_foundry_scenario
+        mock_agent_manager.create_agent.return_value = "foundry-agent-123"
+
+        response = self.client.post(
+            "/api/agents/create",
+            json={"scenario_id": "foundry-agent"},
+        )
+
+        assert response.status_code == 200
+        data = json.loads(response.data)
+        assert data["agent_id"] == "foundry-agent-123"
+        assert data["scenario_id"] == "foundry-agent"
+        mock_agent_manager.create_agent.assert_called_once_with("foundry-agent", mock_foundry_scenario)

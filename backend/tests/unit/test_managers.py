@@ -260,3 +260,35 @@ class TestAgentManager:
         # Verify deletion
         assert agent_id not in agent_manager.agents
         mock_client_instance.agents.delete_agent.assert_called_once_with(agent_id)
+
+    @patch("src.services.managers.config")
+    def test_create_foundry_agent_success(self, mock_config):
+        """Test successful foundry agent creation."""
+        # Configure for foundry agent creation
+        mock_config.__getitem__.side_effect = lambda key: {
+            "use_azure_ai_agents": False,  # Test local fallback
+            "model_deployment_name": "gpt-4o",
+        }.get(key, "default")
+
+        manager = AgentManager()
+        scenario_data = {
+            "isFoundryAgent": True,
+            "foundryConfig": {
+                "requiresCustomAgent": True,
+                "agentConnectionType": "foundry"
+            },
+            "messages": [{"content": "Test foundry instructions"}],
+            "model": "gpt-4o",
+            "modelParameters": {"temperature": 0.8, "max_tokens": 1500},
+        }
+
+        agent_id = manager.create_agent("foundry-test-scenario", scenario_data)
+
+        assert agent_id.startswith("foundry-agent-foundry-test-scenario-")
+        assert agent_id in manager.agents
+        agent_config = manager.agents[agent_id]
+        assert agent_config["scenario_id"] == "foundry-test-scenario"
+        assert agent_config["is_azure_agent"] is False
+        assert agent_config["is_foundry_agent"] is True
+        assert agent_config["foundry_config"]["requiresCustomAgent"] is True
+        assert agent_config["agent_connection_type"] == "foundry"
