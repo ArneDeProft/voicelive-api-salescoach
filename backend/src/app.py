@@ -16,6 +16,7 @@ from typing import Any, Dict, List, cast
 import simple_websocket.ws  # pyright: ignore[reportMissingTypeStubs]
 from flask import Flask, jsonify, request, send_from_directory
 from flask_sock import Sock  # pyright: ignore[reportMissingTypeStubs]
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from src.config import config
 from src.services.analyzers import ConversationAnalyzer, PronunciationAssessor
@@ -52,6 +53,9 @@ logger = logging.getLogger(__name__)
 
 # Initialize Flask application
 app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path=STATIC_URL_PATH)
+# Add proxy fix for running behind Container Apps ingress
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+
 sock = Sock(app)
 
 # Initialize managers and analyzers

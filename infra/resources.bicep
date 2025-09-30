@@ -21,6 +21,9 @@ param gptModelName string = 'gpt-4o'
 param gptModelVersion string = '2024-08-06'
 param gptDeploymentName string = 'gpt-4o'
 
+@description('Optional agent ID for predefined agents')
+param agentId string = 'asst_Ichv47Gt6AewAvVbC2ZKkqAj'
+
 param openAiModelDeployments array = [
   {
     name: gptDeploymentName
@@ -156,7 +159,7 @@ module voicelab 'br/public:avm/res/app/container-app:0.8.0' = {
     name: 'voicelab'
     ingressTargetPort: 8000
     ingressExternal: true
-    ingressTransport: 'http'
+    ingressTransport: 'auto'
     scaleMinReplicas: 1
     scaleMaxReplicas: 10
     secrets: {
@@ -239,6 +242,10 @@ module voicelab 'br/public:avm/res/app/container-app:0.8.0' = {
           {
             name: 'HOST'
             value: '0.0.0.0'
+          }
+          {
+            name: 'AGENT_ID'
+            value: agentId
           }
         ]
       }
