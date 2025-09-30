@@ -51,10 +51,13 @@ export interface Assessment {
   }
 }
 
-export interface AgentConfig {
-  agent_id: string
-  scenario_id: string
+export interface Config {
+  proxy_enabled: boolean
+  ws_endpoint: string
+  predefined_agent_id: string
+  has_predefined_agent: boolean
 }
+
 export interface AgentConfig {
   agent_id: string
   scenario_id: string

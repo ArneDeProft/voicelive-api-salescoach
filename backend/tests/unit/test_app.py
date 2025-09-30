@@ -47,6 +47,34 @@ class TestFlaskApp:
         assert data["proxy_enabled"] is True
         assert data["ws_endpoint"] == "/ws/voice"
 
+    @patch("src.config.config")
+    def test_get_config_with_predefined_agent(self, mock_config):
+        """Test the /api/config endpoint with predefined agent."""
+        mock_config.get.return_value = "test-agent-id"
+
+        response = self.client.get("/api/config")
+
+        assert response.status_code == 200
+        data = json.loads(response.data)
+        assert data["proxy_enabled"] is True
+        assert data["ws_endpoint"] == "/ws/voice"
+        assert data["predefined_agent_id"] == "test-agent-id"
+        assert data["has_predefined_agent"] is True
+
+    @patch("src.config.config")
+    def test_get_config_without_predefined_agent(self, mock_config):
+        """Test the /api/config endpoint without predefined agent."""
+        mock_config.get.return_value = ""  # Empty string means no predefined agent
+
+        response = self.client.get("/api/config")
+
+        assert response.status_code == 200
+        data = json.loads(response.data)
+        assert data["proxy_enabled"] is True
+        assert data["ws_endpoint"] == "/ws/voice"
+        assert data["predefined_agent_id"] == ""
+        assert data["has_predefined_agent"] is False
+
     @patch("src.app.scenario_manager")
     def test_get_scenarios_route(self, mock_scenario_manager):
         """Test the /api/scenarios endpoint."""

@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import React from 'react'
 import { Card, makeStyles, tokens } from '@fluentui/react-components'
+import React from 'react'
 
 const useStyles = makeStyles({
   card: {
@@ -37,7 +37,7 @@ export function VideoPanel({ videoRef }: Props) {
   return (
     <Card className={styles.card}>
       <div className={styles.videoContainer}>
-        <video ref={videoRef} className={styles.video} autoPlay playsInline />
+        <video ref={videoRef} className={styles.video} autoPlay playsInline muted/>
       </div>
     </Card>
   )

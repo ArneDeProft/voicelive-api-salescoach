@@ -219,6 +219,52 @@ CRITICAL INTERACTION GUIDELINES:
             return self._create_azure_agent(scenario_id, combined_instructions, model_name, temperature, max_tokens)
         return self._create_local_agent(scenario_id, combined_instructions, model_name, temperature, max_tokens)
 
+    def create_or_get_agent(self, scenario_id: str, scenario_data: Dict[str, Any]) -> str:
+        """
+        Get an existing agent or create a new one if reuse is not configured.
+
+        Args:
+            scenario_id: The scenario identifier
+            scenario_data: The scenario configuration data
+
+        Returns:
+            str: The agent's ID
+
+        Raises:
+            Exception: If agent creation fails
+        """
+        # Check if we have a predefined agent ID to reuse
+        predefined_agent_id = config.get("agent_id")
+        if predefined_agent_id:
+            logger.info("Reusing predefined agent: %s for scenario: %s", predefined_agent_id, scenario_id)
+
+            # Store the agent config locally for reference
+            if predefined_agent_id not in self.agents:
+                scenario_instructions = scenario_data.get("messages", [{}])[0].get("content", "")
+                combined_instructions = scenario_instructions + self.BASE_INSTRUCTIONS
+                model_name = scenario_data.get("model", config["model_deployment_name"])
+                temperature = scenario_data.get("modelParameters", {}).get("temperature", 0.7)
+                max_tokens = scenario_data.get("modelParameters", {}).get("max_tokens", 2000)
+
+                # For predefined agents, they are Azure AI agents when USE_AZURE_AI_AGENTS is true
+                is_azure_agent = self.use_azure_ai_agents
+
+                self.agents[predefined_agent_id] = self._create_agent_config(
+                    scenario_id=scenario_id,
+                    agent_id=predefined_agent_id,
+                    is_azure_agent=is_azure_agent,
+                    instructions=combined_instructions,
+                    model=model_name,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                )
+                logger.info("Configured predefined agent %s as Azure agent: %s", predefined_agent_id, is_azure_agent)
+
+            return predefined_agent_id
+
+        # Fallback to creating new agents
+        return self.create_agent(scenario_id, scenario_data)
+
     def _create_azure_agent(
         self,
         scenario_id: str,

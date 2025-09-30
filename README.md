@@ -61,6 +61,11 @@ https://github.com/user-attachments/assets/904f1555-6981-4780-ae64-c5757337bcad
    - Value proposition delivery
    - Objection handling skills
 
+### Use your own Foundry agent
+In the env files you can choose an already existing Foundry Agent (eg. one that has access to "knowlegde" or RAG).
+Simply put the env value AGENT_ID=your-predefined-agent-id and it will skip the sales scenario solutions.
+
+
 ## Getting Started
 
 ### Deploy to Azure
@@ -94,6 +99,26 @@ This project includes a dev container for easy setup and a build script for  dev
    ```
 
 Visit `http://localhost:8000` to start training!
+
+### Predefined Agent Configuration
+
+For automated or streamlined deployments, you can configure a predefined agent to skip the scenario selection dialog and immediately start with a specific agent:
+
+1. **Set the AGENT_ID environment variable** in your `.env` file:
+   ```env
+   AGENT_ID=your-predefined-agent-id
+   ```
+
+2. **Application behavior with predefined agent**:
+   - Scenario selection dialog is automatically bypassed
+   - The application starts directly with the specified agent
+   - Voice conversations begin immediately upon page load
+   - Analysis features work normally with the predefined agent
+
+3. **Use case examples**:
+   - Kiosk deployments where users should immediately start with a specific scenario
+   - Demo environments with pre-configured training scenarios
+   - Integration with external systems that pre-select appropriate agents
 
 ## Architecture
 

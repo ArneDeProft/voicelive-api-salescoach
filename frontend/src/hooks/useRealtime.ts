@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Message } from '../types'
 
 interface RealtimeOptions {
@@ -20,6 +20,19 @@ export function useRealtime(options: RealtimeOptions) {
   const audioRecording = useRef<any[]>([])
   const conversationRecording = useRef<any[]>([])
 
+  const agentIdRef = useRef(options.agentId)
+  const onMessageRef = useRef(options.onMessage)
+  const onAudioDeltaRef = useRef(options.onAudioDelta)
+  const onTranscriptRef = useRef(options.onTranscript)
+
+  // Update refs when options change
+  useEffect(() => {
+    agentIdRef.current = options.agentId
+    onMessageRef.current = options.onMessage
+    onAudioDeltaRef.current = options.onAudioDelta
+    onTranscriptRef.current = options.onTranscript
+  }, [options.agentId, options.onMessage, options.onAudioDelta, options.onTranscript])
+
   const connect = useCallback(async () => {
     const config = await fetch('/api/config').then(r => r.json())
     const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
@@ -29,11 +42,11 @@ export function useRealtime(options: RealtimeOptions) {
 
     ws.onopen = () => {
       setConnected(true)
-      if (options.agentId) {
+      if (agentIdRef.current) {
         ws.send(
           JSON.stringify({
             type: 'session.update',
-            session: { agent_id: options.agentId },
+            session: { agent_id: agentIdRef.current },
           })
         )
       }
@@ -41,12 +54,12 @@ export function useRealtime(options: RealtimeOptions) {
 
     ws.onmessage = event => {
       const msg = JSON.parse(event.data)
-      options.onMessage?.(msg)
+      onMessageRef.current?.(msg)
 
       switch (msg.type) {
         case 'response.audio.delta':
           if (msg.delta) {
-            options.onAudioDelta?.(msg.delta)
+            onAudioDeltaRef.current?.(msg.delta)
             audioRecording.current.push({
               type: 'assistant',
               data: msg.delta,
@@ -67,7 +80,7 @@ export function useRealtime(options: RealtimeOptions) {
               role: 'user',
               content: msg.transcript,
             })
-            options.onTranscript?.('user', msg.transcript)
+            onTranscriptRef.current?.('user', msg.transcript)
           }
           break
         case 'response.audio_transcript.done':
@@ -83,7 +96,7 @@ export function useRealtime(options: RealtimeOptions) {
               role: 'assistant',
               content: msg.transcript,
             })
-            options.onTranscript?.('assistant', msg.transcript)
+            onTranscriptRef.current?.('assistant', msg.transcript)
           }
           break
       }
@@ -91,7 +104,7 @@ export function useRealtime(options: RealtimeOptions) {
 
     ws.onclose = () => setConnected(false)
     wsRef.current = ws
-  }, [options.agentId])
+  }, [])
 
   const send = useCallback((data: any) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {

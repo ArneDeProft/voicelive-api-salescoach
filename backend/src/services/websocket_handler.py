@@ -13,7 +13,7 @@ from typing import Any, Dict, Optional
 
 import simple_websocket.ws  # pyright: ignore[reportMissingTypeStubs]
 import websockets
-import websockets.asyncio.client
+from azure.identity import DefaultAzureCredential
 
 from src.config import config
 from src.services.managers import AgentManager
@@ -55,6 +55,7 @@ class VoiceProxyHandler:
             agent_manager: Agent manager instance
         """
         self.agent_manager = agent_manager
+        self.credential = DefaultAzureCredential()
 
     async def handle_connection(self, client_ws: simple_websocket.ws.Server) -> None:
         """
@@ -65,11 +66,28 @@ class VoiceProxyHandler:
         """
 
         azure_ws = None
+        # get agent id from env or config if available, else put to None
+        # this will use the default agent if no specific agent id is provided by the client
+        predefined_agent_id = config.get("agent_id")
         current_agent_id = None
 
-        try:
+        if predefined_agent_id:
+            current_agent_id = predefined_agent_id
+            logger.info("Using predefined agent ID from config: %s", predefined_agent_id)
+
+            # For predefined agents, we need to ensure the agent manager has the configuration
+            # Create a dummy scenario to trigger agent configuration if needed
+            dummy_scenario: Dict[str, Any] = {
+                "messages": [{"content": "You are a helpful assistant."}],
+                "model": config.get("model_deployment_name", "gpt-4o"),
+                "modelParameters": {"temperature": 0.7, "max_tokens": 2000}
+            }
+            # This will configure the predefined agent if not already configured
+            self.agent_manager.create_or_get_agent("predefined", dummy_scenario)
+        else:
             current_agent_id = await self._get_agent_id_from_client(client_ws)
 
+        try:
             azure_ws = await self._connect_to_azure(current_agent_id)
             if not azure_ws:
                 await self._send_error(client_ws, "Failed to connect to Azure Voice API")
@@ -92,33 +110,116 @@ class VoiceProxyHandler:
 
     async def _get_agent_id_from_client(self, client_ws: simple_websocket.ws.Server) -> Optional[str]:
         """Get agent ID from initial client message."""
-
         try:
-            first_message: str | None = await asyncio.get_event_loop().run_in_executor(
-                None,
-                client_ws.receive,  # pyright: ignore[reportUnknownArgumentType,reportUnknownMemberType]
+            # Set a reasonable timeout for receiving the first message
+            timeout_seconds = 10.0
+
+            logger.info("Waiting for initial message from client...")
+
+            first_message: str | None = await asyncio.wait_for(
+                asyncio.get_event_loop().run_in_executor(
+                    None,
+                    client_ws.receive,  # pyright: ignore[reportUnknownArgumentType,reportUnknownMemberType]
+                ),
+                timeout=timeout_seconds
             )
+
             if first_message:
-                msg = json.loads(first_message)
-                if msg.get("type") == "session.update":
-                    return msg.get("session", {}).get("agent_id")
+                logger.info("Received first message from client: %s", first_message[:200])  # Log first 200 chars
+                try:
+                    msg = json.loads(first_message)
+                    logger.info("Parsed message type: %s", msg.get("type"))
+
+                    if msg.get("type") == "session.update":
+                        agent_id = msg.get("session", {}).get("agent_id")
+                        if agent_id:
+                            logger.info("Extracted agent ID from client message: %s", agent_id)
+                            return agent_id
+                        else:
+                            logger.info("session.update message received but no agent_id found")
+                    else:
+                        logger.info("First message is not session.update type: %s", msg.get("type"))
+                        # This might be a different type of message, we should handle it in forwarding
+
+                except json.JSONDecodeError as json_err:
+                    logger.error("Failed to parse JSON from first message: %s", json_err)
+
+            else:
+                logger.warning("First message was None or empty")
+
+        except asyncio.TimeoutError:
+            logger.warning("Timeout waiting for agent ID from client (waited %s seconds), proceeding without specific agent", 10)
         except Exception as e:
             logger.error("Error getting agent ID: %s", e)
-            return None
 
-    async def _connect_to_azure(self, agent_id: Optional[str]) -> Optional[websockets.asyncio.client.ClientConnection]:
+        # Return None to indicate no specific agent ID was provided
+        logger.info("No specific agent ID provided, will use default or configured agent")
+        return None
+
+    async def _connect_to_azure(self, agent_id: Optional[str]) -> Optional[websockets.WebSocketClientProtocol]:
         """Connect to Azure Voice API with appropriate configuration."""
+        azure_ws = None
         try:
-            agent_config = self.agent_manager.get_agent(agent_id) if agent_id else None
+            # Validate required configuration
+            required_configs = {
+                "azure_ai_resource_name": config.get("azure_ai_resource_name"),
+            }
 
-            azure_url = self._build_azure_url(agent_id, agent_config)
-
-            api_key = config.get("azure_openai_api_key")
-            if not api_key:
-                logger.error("No API key found in configuration (azure_openai_api_key)")
+            missing_configs = [key for key, value in required_configs.items() if not value]
+            if missing_configs:
+                logger.error("Missing required configuration: %s", ", ".join(missing_configs))
                 return None
 
-            headers = {"api-key": api_key}
+            agent_config = self.agent_manager.get_agent(agent_id) if agent_id else None
+
+            # Determine authentication method based on agent type
+            is_azure_agent = agent_config and agent_config.get("is_azure_agent", False)
+
+            if is_azure_agent:
+                # For Azure AI Agents, use Azure AD token authentication
+                project_name = config.get("azure_ai_project_name")
+                if not project_name:
+                    logger.error("AZURE_AI_PROJECT_NAME is required for Azure AI agents but not configured")
+                    return None
+
+                # Get Azure AD token with the correct scope for AI services
+                try:
+                    token = await asyncio.get_event_loop().run_in_executor(
+                        None,
+                        lambda: self.credential.get_token("https://ai.azure.com/.default").token
+                    )
+                    headers = {"Authorization": f"Bearer {token}"}
+                    logger.info("Using Azure AD token authentication for Azure AI agent with ml.azure.com scope")
+                except Exception as token_error:
+                    logger.error("Failed to get Azure AD token: %s", token_error)
+                    # Fallback to cognitive services scope
+                    try:
+                        token = await asyncio.get_event_loop().run_in_executor(
+                            None,
+                            lambda: self.credential.get_token("https://cognitiveservices.azure.com/.default").token
+                        )
+                        headers = {"Authorization": f"Bearer {token}"}
+                        logger.info("Using Azure AD token authentication with cognitiveservices.azure.com scope (fallback)")
+                    except Exception as fallback_error:
+                        logger.error("Failed to get Azure AD token with fallback scope: %s", fallback_error)
+                        return None
+            else:
+                # For regular OpenAI models, use API key authentication
+                api_key = config.get("azure_openai_api_key")
+                if not api_key:
+                    logger.error("AZURE_OPENAI_API_KEY is required for non-agent mode but not configured")
+                    return None
+                headers = {"api-key": api_key}
+                logger.info("Using API key authentication for OpenAI model")
+
+            azure_url = self._build_azure_url(agent_id, agent_config)
+            logger.info("Connecting to Azure URL: %s", azure_url.split('?')[0])  # Log URL without query params for security
+            logger.debug("Full Azure URL (sanitized): %s", azure_url.replace(config.get("project_endpoint", ""), "[PROJECT_ENDPOINT]"))
+
+            # Log authentication details
+            if is_azure_agent:
+                logger.info("Agent configuration: is_azure_agent=%s, agent_id=%s, project_name=%s",
+                           is_azure_agent, agent_id, config.get("azure_ai_project_name"))
 
             azure_ws = await websockets.connect(azure_url, additional_headers=headers)
             logger.info("Connected to Azure Voice API with agent: %s", agent_id or "default")
@@ -127,8 +228,21 @@ class VoiceProxyHandler:
 
             return azure_ws
 
+        except websockets.exceptions.InvalidStatusCode as status_error:
+            logger.error("WebSocket connection failed with status code: %s", status_error.status_code)
+            logger.error("Response headers: %s", getattr(status_error, 'response_headers', 'N/A'))
+            return None
+        except websockets.exceptions.WebSocketException as ws_error:
+            logger.error("WebSocket connection failed: %s", ws_error)
+            return None
         except Exception as e:
             logger.error("Failed to connect to Azure: %s", e)
+            logger.error("Exception type: %s", type(e).__name__)
+            if azure_ws:
+                try:
+                    await azure_ws.close()
+                except Exception as close_error:
+                    logger.debug("Error closing Azure WebSocket: %s", close_error)
             return None
 
     def _build_azure_url(self, agent_id: Optional[str], agent_config: Optional[Dict[str, Any]]) -> str:
@@ -156,15 +270,20 @@ class VoiceProxyHandler:
 
     def _build_agent_specific_url(self, base_url: str, agent_id: Optional[str], agent_config: Dict[str, Any]) -> str:
         """Build URL for specific agent configuration."""
-        project_name = config["azure_ai_project_name"]
+        project_name = config.get("azure_ai_project_name")
         if agent_config.get("is_azure_agent"):
-            return f"{base_url}&agent-id={agent_id}" f"&agent-project-name={project_name}"
+            # For Azure AI agents, include both agent-id, project name, and connection string
+            project_endpoint = config.get("project_endpoint", "")
+            url = f"{base_url}&agent-id={agent_id}&agent-project-name={project_name}"
+            if project_endpoint:
+                url += f"&connection-string={project_endpoint}"
+            return url
         model_name = agent_config.get("model", config["model_deployment_name"])
         return f"{base_url}&model={model_name}"
 
     async def _send_initial_config(
         self,
-        azure_ws: websockets.asyncio.client.ClientConnection,
+        azure_ws: websockets.WebSocketClientProtocol,
         agent_config: Optional[Dict[str, Any]],
     ) -> None:
         """Send initial configuration to Azure."""
@@ -206,7 +325,7 @@ class VoiceProxyHandler:
     async def _handle_message_forwarding(
         self,
         client_ws: simple_websocket.ws.Server,
-        azure_ws: websockets.asyncio.client.ClientConnection,
+        azure_ws: websockets.WebSocketClientProtocol,
     ) -> None:
         """Handle bidirectional message forwarding."""
         tasks = [
@@ -222,7 +341,7 @@ class VoiceProxyHandler:
     async def _forward_client_to_azure(
         self,
         client_ws: simple_websocket.ws.Server,
-        azure_ws: websockets.asyncio.client.ClientConnection,
+        azure_ws: websockets.WebSocketClientProtocol,
     ) -> None:
         """Forward messages from client to Azure."""
         try:
@@ -233,6 +352,20 @@ class VoiceProxyHandler:
                 )
                 if message is None:
                     break
+
+                # Strip agent_id from session.update messages before forwarding to Azure
+                # agent_id is only used in the URL, not as a session parameter
+                try:
+                    msg_data = json.loads(message)
+                    if msg_data.get("type") == "session.update" and "session" in msg_data:
+                        if "agent_id" in msg_data["session"]:
+                            logger.debug("Stripping agent_id from session.update message before forwarding to Azure")
+                            del msg_data["session"]["agent_id"]
+                            message = json.dumps(msg_data)
+                except (json.JSONDecodeError, KeyError):
+                    # If it's not JSON or doesn't have the expected structure, forward as-is
+                    pass
+
                 logger.debug("Client->Azure: %s", message[:LOG_MESSAGE_MAX_LENGTH])
                 await azure_ws.send(message)
         except Exception:
@@ -240,13 +373,42 @@ class VoiceProxyHandler:
 
     async def _forward_azure_to_client(
         self,
-        azure_ws: websockets.asyncio.client.ClientConnection,
+        azure_ws: websockets.WebSocketClientProtocol,
         client_ws: simple_websocket.ws.Server,
     ) -> None:
         """Forward messages from Azure to client."""
+        last_session_updated_hash: Optional[int] = None
+
         try:
             async for message in azure_ws:
-                logger.debug("Azure->Client: %s", message[:LOG_MESSAGE_MAX_LENGTH])
+                # Parse and log WebRTC-related messages
+                try:
+                    msg_data = json.loads(message)
+                    msg_type = msg_data.get("type", "")
+
+                    # Deduplicate session.updated messages with identical content
+                    # This prevents duplicate WebRTC setup calls that cause peer connection churn
+                    if msg_type == "session.updated":
+                        # Create a hash of the session content to detect duplicates
+                        session_content = json.dumps(msg_data.get("session", {}), sort_keys=True)
+                        session_hash = hash(session_content)
+
+                        if session_hash == last_session_updated_hash:
+                            logger.debug("Skipping duplicate session.updated message (hash: %s)", session_hash)
+                            continue
+
+                        last_session_updated_hash = session_hash
+                        logger.info("Session updated with avatar config: %s",
+                                json.dumps(msg_data.get("session", {}).get("avatar", {})))
+
+                    # Log important WebRTC and session messages
+                    if any(keyword in msg_type for keyword in ["session", "avatar", "sdp", "ice"]):
+                        logger.info("WebRTC/Session message: %s", msg_type)
+
+                    logger.debug("Azure->Client: %s", message[:LOG_MESSAGE_MAX_LENGTH])
+                except json.JSONDecodeError:
+                    logger.debug("Azure->Client (binary): %d bytes", len(message))
+
                 await asyncio.get_event_loop().run_in_executor(
                     None,
                     client_ws.send,  # pyright: ignore[reportUnknownArgumentType,reportUnknownMemberType]

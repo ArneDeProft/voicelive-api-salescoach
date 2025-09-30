@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { Scenario, Assessment } from '../types'
+import { Assessment, Config, Scenario } from '../types'
 
 function extractUserText(conversationMessages: any[]): string {
   return conversationMessages
@@ -14,7 +14,7 @@ function extractUserText(conversationMessages: any[]): string {
 }
 
 export const api = {
-  async getConfig() {
+  async getConfig(): Promise<Config> {
     const res = await fetch('/api/config')
     return res.json()
   },

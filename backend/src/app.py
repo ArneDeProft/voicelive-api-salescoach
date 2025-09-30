@@ -23,7 +23,7 @@ from src.services.managers import AgentManager, ScenarioManager
 from src.services.websocket_handler import VoiceProxyHandler
 
 # Constants
-STATIC_FOLDER = "../static"
+STATIC_FOLDER = str(Path(__file__).parent.parent / "static")
 STATIC_URL_PATH = ""
 INDEX_FILE = "index.html"
 AUDIO_PROCESSOR_FILE = "audio-processor.js"
@@ -76,7 +76,13 @@ def index():
 @app.route(API_CONFIG_ENDPOINT)
 def get_config():
     """Get client configuration."""
-    return jsonify({"proxy_enabled": True, "ws_endpoint": WEBSOCKET_ENDPOINT})
+    predefined_agent_id = config.get("agent_id")
+    return jsonify({
+        "proxy_enabled": True,
+        "ws_endpoint": WEBSOCKET_ENDPOINT,
+        "predefined_agent_id": predefined_agent_id,
+        "has_predefined_agent": bool(predefined_agent_id)
+    })
 
 
 @app.route(API_SCENARIOS_ENDPOINT)
@@ -114,7 +120,7 @@ def create_agent():
         return jsonify({"error": SCENARIO_NOT_FOUND}), HTTP_NOT_FOUND
 
     try:
-        agent_id = agent_manager.create_agent(scenario_id, scenario)
+        agent_id = agent_manager.create_or_get_agent(scenario_id, scenario)
         return jsonify({"agent_id": agent_id, "scenario_id": scenario_id})
     except Exception as e:
         logger.error("Failed to create agent: %s", e)
