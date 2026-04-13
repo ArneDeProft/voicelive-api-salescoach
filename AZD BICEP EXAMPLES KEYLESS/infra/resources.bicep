@@ -16,7 +16,6 @@ param principalType string
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = uniqueString(subscription().id, resourceGroup().id, location)
-var allTags = union(tags, { SecurityControl: 'Ignore' })
 
 param gptModelName string = 'gpt-5.4'
 param gptModelVersion string = '2026-03-05'
@@ -37,7 +36,7 @@ param openAiModelDeployments array = [
 resource aiFoundryResource 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
   name: 'aifoundry-voicelab-${resourceToken}'
   location: location
-  tags: allTags
+  tags: tags
   kind: 'AIServices'
   sku: {
     name: 'S0'
@@ -75,7 +74,7 @@ resource aiFoundryResource 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
 resource speechService 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
   name: 'speech-voicelab-${resourceToken}'
   location: location
-  tags: allTags
+  tags: tags
   kind: 'SpeechServices'
   sku: {
     name: 'S0'
@@ -83,7 +82,7 @@ resource speechService 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
   properties: {
     customSubDomainName: 'speech-voicelab-${resourceToken}'
     publicNetworkAccess: 'Enabled'
-    disableLocalAuth: true
+    disableLocalAuth: false
   }
 }
 
@@ -95,7 +94,7 @@ module monitoring 'br/public:avm/ptn/azd/monitoring:0.1.0' = {
     applicationInsightsName: '${abbrs.insightsComponents}${resourceToken}'
     applicationInsightsDashboardName: '${abbrs.portalDashboards}${resourceToken}'
     location: location
-    tags: allTags
+    tags: tags
   }
 }
 // Container registry
@@ -104,7 +103,7 @@ module containerRegistry 'br/public:avm/res/container-registry/registry:0.1.1' =
   params: {
     name: '${abbrs.containerRegistryRegistries}${resourceToken}'
     location: location
-    tags: allTags
+    tags: tags
     publicNetworkAccess: 'Enabled'
     roleAssignments: [
       {
@@ -135,7 +134,6 @@ module voicelabIdentity 'br/public:avm/res/managed-identity/user-assigned-identi
   params: {
     name: '${abbrs.managedIdentityUserAssignedIdentities}voicelab-${resourceToken}'
     location: location
-    tags: allTags
   }
 }
 module voicelabFetchLatestImage './modules/fetch-container-image.bicep' = {
@@ -155,6 +153,18 @@ module voicelab 'br/public:avm/res/app/container-app:0.8.0' = {
     ingressTransport: 'http'
     scaleMinReplicas: 1
     scaleMaxReplicas: 10
+    secrets: {
+      secureList: [
+         {
+          name: 'ai-foundry-api-key'
+          value: aiFoundryResource.listKeys().key1
+        }
+        {
+          name: 'speech-api-key'
+          value: speechService.listKeys().key1
+        }
+      ]
+    }
     containers: [
       {
         image: voicelabFetchLatestImage.outputs.?containers[?0].?image ?? 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
@@ -177,12 +187,20 @@ module voicelab 'br/public:avm/res/app/container-app:0.8.0' = {
             value: aiFoundryResource.properties.endpoint
           }
           {
+            name: 'AZURE_OPENAI_API_KEY'
+            secretRef: 'ai-foundry-api-key'
+          }
+          {
             name: 'PROJECT_ENDPOINT'
-            value: '${aiFoundryResource.properties.endpoint}'
+            value: '${aiFoundryResource.properties.endpoint}api/projects/default-project'
           }
           {
             name: 'MODEL_DEPLOYMENT_NAME'
             value: gptDeploymentName
+          }
+          {
+            name: 'AZURE_SPEECH_KEY'
+            secretRef: 'speech-api-key'
           }
           {
             name: 'AZURE_SPEECH_REGION'
@@ -231,7 +249,7 @@ module voicelab 'br/public:avm/res/app/container-app:0.8.0' = {
     ]
     environmentResourceId: containerAppsEnvironment.outputs.resourceId
     location: location
-    tags: union(allTags, { 'azd-service-name': 'voicelab' })
+    tags: union(tags, { 'azd-service-name': 'voicelab' })
   }
 }
 
@@ -288,7 +306,7 @@ output SERVICE_VOICELAB_URI string = 'https://${voicelab.outputs.fqdn}'
 output AZURE_TENANT_ID string = subscription().tenantId
 output AZURE_SUBSCRIPTION_ID string = subscription().subscriptionId
 output VOICELAB_IDENTITY_PRINCIPAL_ID string = voicelabIdentity.outputs.principalId
-output PROJECT_ENDPOINT string = '${aiFoundryResource.properties.endpoint}'
+output PROJECT_ENDPOINT string = '${aiFoundryResource.properties.endpoint}api/projects/default-project'
 output AZURE_OPENAI_ENDPOINT string = aiFoundryResource.properties.endpoint
 output AZURE_SPEECH_REGION string =  location
 output AI_FOUNDRY_RESOURCE_NAME string = aiFoundryResource.name

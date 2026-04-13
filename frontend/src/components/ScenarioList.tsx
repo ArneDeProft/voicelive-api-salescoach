@@ -7,16 +7,14 @@ import {
   Button,
   Card,
   CardHeader,
-  Divider,
   Dropdown,
   Label,
   Option,
   Spinner,
   Text,
   makeStyles,
-  tokens,
+  tokens
 } from '@fluentui/react-components'
-import { Edit24Regular } from '@fluentui/react-icons'
 import { useState } from 'react'
 import { api } from '../services/api'
 import {
@@ -26,7 +24,6 @@ import {
   DEFAULT_AVATAR,
   Scenario,
 } from '../types'
-import { CustomScenarioEditor } from './CustomScenarioEditor'
 
 const useStyles = makeStyles({
   container: {
@@ -181,9 +178,11 @@ export function ScenarioList({
   }
 
   // Build the complete scenario list (server scenarios only, custom handled separately)
-  const allScenarios = generatedScenario
-    ? [...scenarios.filter(s => !s.is_graph_scenario), generatedScenario]
-    : scenarios
+  //const allScenarios = generatedScenario
+  //  ? [...scenarios.filter(s => !s.is_graph_scenario), generatedScenario]
+  //  : scenarios
+  //NO CUSTOM SCENARIO
+  const allScenarios = scenarios.filter(s => !s.is_graph_scenario)
 
   const handleEditCustomScenario = (
     scenario: CustomScenario,
@@ -250,7 +249,8 @@ export function ScenarioList({
         })}
       </div>
 
-      {/* Custom scenarios section */}
+     {/*  HIDE FOR ATLAS
+     Custom scenarios section
       <Divider style={{ marginTop: tokens.spacingVerticalL }} />
 
       <div className={styles.sectionHeader}>
@@ -308,7 +308,7 @@ export function ScenarioList({
             )
           })}
         </div>
-      )}
+      )} */}
 
       <div className={styles.actions}>
         <div className={styles.avatarSelector}>

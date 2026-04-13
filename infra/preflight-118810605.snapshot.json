@@ -1,0 +1,1641 @@
+{
+  "predictedResources": [
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026",
+      "type": "Microsoft.Resources/resourceGroups",
+      "name": "rg-salesvoice-apr2026",
+      "apiVersion": "2021-04-01",
+      "location": "swedencentral",
+      "tags": {
+        "azd-env-name": "salesvoice-apr2026"
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.CognitiveServices/accounts/aifoundry-voicelab-4kz4cqrdguio4",
+      "type": "Microsoft.CognitiveServices/accounts",
+      "name": "aifoundry-voicelab-4kz4cqrdguio4",
+      "apiVersion": "2024-10-01",
+      "location": "swedencentral",
+      "sku": {
+        "name": "S0"
+      },
+      "kind": "AIServices",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "tags": {
+        "azd-env-name": "salesvoice-apr2026",
+        "SecurityControl": "Ignore"
+      },
+      "properties": {
+        "customSubDomainName": "aifoundry-voicelab-4kz4cqrdguio4",
+        "publicNetworkAccess": "Enabled",
+        "disableLocalAuth": false
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.CognitiveServices/accounts/aifoundry-voicelab-4kz4cqrdguio4/deployments/gpt-5.4",
+      "type": "Microsoft.CognitiveServices/accounts/deployments",
+      "name": "aifoundry-voicelab-4kz4cqrdguio4/gpt-5.4",
+      "apiVersion": "2024-10-01",
+      "sku": {
+        "name": "GlobalStandard",
+        "capacity": 100
+      },
+      "properties": {
+        "model": {
+          "format": "OpenAI",
+          "name": "gpt-5.4",
+          "version": "2026-03-05"
+        },
+        "raiPolicyName": null,
+        "versionUpgradeOption": "OnceNewDefaultVersionAvailable"
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.CognitiveServices/accounts/aifoundry-voicelab-4kz4cqrdguio4/deployments/text-embedding-3-small",
+      "type": "Microsoft.CognitiveServices/accounts/deployments",
+      "name": "aifoundry-voicelab-4kz4cqrdguio4/text-embedding-3-small",
+      "apiVersion": "2024-10-01",
+      "sku": {
+        "name": "GlobalStandard",
+        "capacity": 100
+      },
+      "properties": {
+        "model": {
+          "format": "OpenAI",
+          "name": "text-embedding-3-small",
+          "version": null
+        },
+        "raiPolicyName": null,
+        "versionUpgradeOption": "OnceNewDefaultVersionAvailable"
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.CognitiveServices/accounts/speech-voicelab-4kz4cqrdguio4",
+      "type": "Microsoft.CognitiveServices/accounts",
+      "name": "speech-voicelab-4kz4cqrdguio4",
+      "apiVersion": "2024-10-01",
+      "location": "swedencentral",
+      "sku": {
+        "name": "S0"
+      },
+      "kind": "SpeechServices",
+      "tags": {
+        "azd-env-name": "salesvoice-apr2026",
+        "SecurityControl": "Ignore"
+      },
+      "properties": {
+        "customSubDomainName": "speech-voicelab-4kz4cqrdguio4",
+        "publicNetworkAccess": "Enabled",
+        "disableLocalAuth": true
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-voicelab-4kz4cqrdguio4",
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "name": "id-voicelab-4kz4cqrdguio4",
+      "apiVersion": "2023-01-31",
+      "location": "swedencentral",
+      "tags": {
+        "azd-env-name": "salesvoice-apr2026",
+        "SecurityControl": "Ignore"
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.OperationalInsights/workspaces/log-4kz4cqrdguio4",
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "name": "log-4kz4cqrdguio4",
+      "apiVersion": "2022-10-01",
+      "location": "swedencentral",
+      "tags": {
+        "azd-env-name": "salesvoice-apr2026",
+        "SecurityControl": "Ignore"
+      },
+      "properties": {
+        "features": {
+          "searchVersion": 1,
+          "enableLogAccessUsingOnlyResourcePermissions": false
+        },
+        "sku": {
+          "name": "PerGB2018",
+          "capacityReservationLevel": null
+        },
+        "retentionInDays": 30,
+        "workspaceCapping": {
+          "dailyQuotaGb": -1
+        },
+        "publicNetworkAccessForIngestion": "Enabled",
+        "publicNetworkAccessForQuery": "Enabled",
+        "forceCmkForQuery": true
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4",
+      "type": "Microsoft.Insights/components",
+      "name": "appi-4kz4cqrdguio4",
+      "apiVersion": "2020-02-02",
+      "location": "swedencentral",
+      "kind": "web",
+      "tags": {
+        "azd-env-name": "salesvoice-apr2026",
+        "SecurityControl": "Ignore"
+      },
+      "properties": {
+        "Application_Type": "web",
+        "DisableIpMasking": true,
+        "DisableLocalAuth": false,
+        "ForceCustomerStorageForProfiler": false,
+        "WorkspaceResourceId": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.OperationalInsights/workspaces/log-4kz4cqrdguio4",
+        "publicNetworkAccessForIngestion": "Enabled",
+        "publicNetworkAccessForQuery": "Enabled",
+        "RetentionInDays": 365,
+        "SamplingPercentage": 100
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Portal/dashboards/dash-4kz4cqrdguio4",
+      "type": "Microsoft.Portal/dashboards",
+      "name": "dash-4kz4cqrdguio4",
+      "apiVersion": "2020-09-01-preview",
+      "location": "swedencentral",
+      "properties": {
+        "lenses": [
+          {
+            "order": 0,
+            "parts": [
+              {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "colSpan": 2,
+                  "rowSpan": 1
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "id",
+                      "value": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                    },
+                    {
+                      "name": "Version",
+                      "value": "1.0"
+                    }
+                  ],
+                  "type": "Extension/AppInsightsExtension/PartType/AspNetOverviewPinnedPart",
+                  "asset": {
+                    "idInputName": "id",
+                    "type": "ApplicationInsights"
+                  },
+                  "defaultMenuItemId": "overview"
+                }
+              },
+              {
+                "position": {
+                  "x": 2,
+                  "y": 0,
+                  "colSpan": 1,
+                  "rowSpan": 1
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "ComponentId",
+                      "value": {
+                        "Name": "appi-4kz4cqrdguio4",
+                        "SubscriptionId": "f865c43e-c809-42fb-ba6c-09909427b778",
+                        "ResourceGroup": "rg-salesvoice-apr2026"
+                      }
+                    },
+                    {
+                      "name": "Version",
+                      "value": "1.0"
+                    }
+                  ],
+                  "type": "Extension/AppInsightsExtension/PartType/ProactiveDetectionAsyncPart",
+                  "asset": {
+                    "idInputName": "ComponentId",
+                    "type": "ApplicationInsights"
+                  },
+                  "defaultMenuItemId": "ProactiveDetection"
+                }
+              },
+              {
+                "position": {
+                  "x": 3,
+                  "y": 0,
+                  "colSpan": 1,
+                  "rowSpan": 1
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "ComponentId",
+                      "value": {
+                        "Name": "appi-4kz4cqrdguio4",
+                        "SubscriptionId": "f865c43e-c809-42fb-ba6c-09909427b778",
+                        "ResourceGroup": "rg-salesvoice-apr2026"
+                      }
+                    },
+                    {
+                      "name": "ResourceId",
+                      "value": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                    }
+                  ],
+                  "type": "Extension/AppInsightsExtension/PartType/QuickPulseButtonSmallPart",
+                  "asset": {
+                    "idInputName": "ComponentId",
+                    "type": "ApplicationInsights"
+                  }
+                }
+              },
+              {
+                "position": {
+                  "x": 4,
+                  "y": 0,
+                  "colSpan": 1,
+                  "rowSpan": 1
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "ComponentId",
+                      "value": {
+                        "Name": "appi-4kz4cqrdguio4",
+                        "SubscriptionId": "f865c43e-c809-42fb-ba6c-09909427b778",
+                        "ResourceGroup": "rg-salesvoice-apr2026"
+                      }
+                    },
+                    {
+                      "name": "TimeContext",
+                      "value": {
+                        "durationMs": 86400000,
+                        "endTime": null,
+                        "createdTime": "2018-05-04T01:20:33.345Z",
+                        "isInitialTime": true,
+                        "grain": 1,
+                        "useDashboardTimeRange": false
+                      }
+                    },
+                    {
+                      "name": "Version",
+                      "value": "1.0"
+                    }
+                  ],
+                  "type": "Extension/AppInsightsExtension/PartType/AvailabilityNavButtonPart",
+                  "asset": {
+                    "idInputName": "ComponentId",
+                    "type": "ApplicationInsights"
+                  }
+                }
+              },
+              {
+                "position": {
+                  "x": 5,
+                  "y": 0,
+                  "colSpan": 1,
+                  "rowSpan": 1
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "ComponentId",
+                      "value": {
+                        "Name": "appi-4kz4cqrdguio4",
+                        "SubscriptionId": "f865c43e-c809-42fb-ba6c-09909427b778",
+                        "ResourceGroup": "rg-salesvoice-apr2026"
+                      }
+                    },
+                    {
+                      "name": "TimeContext",
+                      "value": {
+                        "durationMs": 86400000,
+                        "endTime": null,
+                        "createdTime": "2018-05-08T18:47:35.237Z",
+                        "isInitialTime": true,
+                        "grain": 1,
+                        "useDashboardTimeRange": false
+                      }
+                    },
+                    {
+                      "name": "ConfigurationId",
+                      "value": "78ce933e-e864-4b05-a27b-71fd55a6afad"
+                    }
+                  ],
+                  "type": "Extension/AppInsightsExtension/PartType/AppMapButtonPart",
+                  "asset": {
+                    "idInputName": "ComponentId",
+                    "type": "ApplicationInsights"
+                  }
+                }
+              },
+              {
+                "position": {
+                  "x": 0,
+                  "y": 1,
+                  "colSpan": 3,
+                  "rowSpan": 1
+                },
+                "metadata": {
+                  "inputs": [],
+                  "type": "Extension/HubsExtension/PartType/MarkdownPart",
+                  "settings": {
+                    "content": {
+                      "settings": {
+                        "content": "# Usage",
+                        "title": "",
+                        "subtitle": ""
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "position": {
+                  "x": 3,
+                  "y": 1,
+                  "colSpan": 1,
+                  "rowSpan": 1
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "ComponentId",
+                      "value": {
+                        "Name": "appi-4kz4cqrdguio4",
+                        "SubscriptionId": "f865c43e-c809-42fb-ba6c-09909427b778",
+                        "ResourceGroup": "rg-salesvoice-apr2026"
+                      }
+                    },
+                    {
+                      "name": "TimeContext",
+                      "value": {
+                        "durationMs": 86400000,
+                        "endTime": null,
+                        "createdTime": "2018-05-04T01:22:35.782Z",
+                        "isInitialTime": true,
+                        "grain": 1,
+                        "useDashboardTimeRange": false
+                      }
+                    }
+                  ],
+                  "type": "Extension/AppInsightsExtension/PartType/UsageUsersOverviewPart",
+                  "asset": {
+                    "idInputName": "ComponentId",
+                    "type": "ApplicationInsights"
+                  }
+                }
+              },
+              {
+                "position": {
+                  "x": 4,
+                  "y": 1,
+                  "colSpan": 3,
+                  "rowSpan": 1
+                },
+                "metadata": {
+                  "inputs": [],
+                  "type": "Extension/HubsExtension/PartType/MarkdownPart",
+                  "settings": {
+                    "content": {
+                      "settings": {
+                        "content": "# Reliability",
+                        "title": "",
+                        "subtitle": ""
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "position": {
+                  "x": 7,
+                  "y": 1,
+                  "colSpan": 1,
+                  "rowSpan": 1
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "ResourceId",
+                      "value": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                    },
+                    {
+                      "name": "DataModel",
+                      "value": {
+                        "version": "1.0.0",
+                        "timeContext": {
+                          "durationMs": 86400000,
+                          "createdTime": "2018-05-04T23:42:40.072Z",
+                          "isInitialTime": false,
+                          "grain": 1,
+                          "useDashboardTimeRange": false
+                        }
+                      },
+                      "isOptional": true
+                    },
+                    {
+                      "name": "ConfigurationId",
+                      "value": "8a02f7bf-ac0f-40e1-afe9-f0e72cfee77f",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/AppInsightsExtension/PartType/CuratedBladeFailuresPinnedPart",
+                  "isAdapter": true,
+                  "asset": {
+                    "idInputName": "ResourceId",
+                    "type": "ApplicationInsights"
+                  },
+                  "defaultMenuItemId": "failures"
+                }
+              },
+              {
+                "position": {
+                  "x": 8,
+                  "y": 1,
+                  "colSpan": 3,
+                  "rowSpan": 1
+                },
+                "metadata": {
+                  "inputs": [],
+                  "type": "Extension/HubsExtension/PartType/MarkdownPart",
+                  "settings": {
+                    "content": {
+                      "settings": {
+                        "content": "# Responsiveness\r\n",
+                        "title": "",
+                        "subtitle": ""
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "position": {
+                  "x": 11,
+                  "y": 1,
+                  "colSpan": 1,
+                  "rowSpan": 1
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "ResourceId",
+                      "value": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                    },
+                    {
+                      "name": "DataModel",
+                      "value": {
+                        "version": "1.0.0",
+                        "timeContext": {
+                          "durationMs": 86400000,
+                          "createdTime": "2018-05-04T23:43:37.804Z",
+                          "isInitialTime": false,
+                          "grain": 1,
+                          "useDashboardTimeRange": false
+                        }
+                      },
+                      "isOptional": true
+                    },
+                    {
+                      "name": "ConfigurationId",
+                      "value": "2a8ede4f-2bee-4b9c-aed9-2db0e8a01865",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/AppInsightsExtension/PartType/CuratedBladePerformancePinnedPart",
+                  "isAdapter": true,
+                  "asset": {
+                    "idInputName": "ResourceId",
+                    "type": "ApplicationInsights"
+                  },
+                  "defaultMenuItemId": "performance"
+                }
+              },
+              {
+                "position": {
+                  "x": 12,
+                  "y": 1,
+                  "colSpan": 3,
+                  "rowSpan": 1
+                },
+                "metadata": {
+                  "inputs": [],
+                  "type": "Extension/HubsExtension/PartType/MarkdownPart",
+                  "settings": {
+                    "content": {
+                      "settings": {
+                        "content": "# Browser",
+                        "title": "",
+                        "subtitle": ""
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "position": {
+                  "x": 15,
+                  "y": 1,
+                  "colSpan": 1,
+                  "rowSpan": 1
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "ComponentId",
+                      "value": {
+                        "Name": "appi-4kz4cqrdguio4",
+                        "SubscriptionId": "f865c43e-c809-42fb-ba6c-09909427b778",
+                        "ResourceGroup": "rg-salesvoice-apr2026"
+                      }
+                    },
+                    {
+                      "name": "MetricsExplorerJsonDefinitionId",
+                      "value": "BrowserPerformanceTimelineMetrics"
+                    },
+                    {
+                      "name": "TimeContext",
+                      "value": {
+                        "durationMs": 86400000,
+                        "createdTime": "2018-05-08T12:16:27.534Z",
+                        "isInitialTime": false,
+                        "grain": 1,
+                        "useDashboardTimeRange": false
+                      }
+                    },
+                    {
+                      "name": "CurrentFilter",
+                      "value": {
+                        "eventTypes": [
+                          4,
+                          1,
+                          3,
+                          5,
+                          2,
+                          6,
+                          13
+                        ],
+                        "typeFacets": {},
+                        "isPermissive": false
+                      }
+                    },
+                    {
+                      "name": "id",
+                      "value": {
+                        "Name": "appi-4kz4cqrdguio4",
+                        "SubscriptionId": "f865c43e-c809-42fb-ba6c-09909427b778",
+                        "ResourceGroup": "rg-salesvoice-apr2026"
+                      }
+                    },
+                    {
+                      "name": "Version",
+                      "value": "1.0"
+                    }
+                  ],
+                  "type": "Extension/AppInsightsExtension/PartType/MetricsExplorerBladePinnedPart",
+                  "asset": {
+                    "idInputName": "ComponentId",
+                    "type": "ApplicationInsights"
+                  },
+                  "defaultMenuItemId": "browser"
+                }
+              },
+              {
+                "position": {
+                  "x": 0,
+                  "y": 2,
+                  "colSpan": 4,
+                  "rowSpan": 3
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "value": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "sessions/count",
+                              "aggregationType": 5,
+                              "namespace": "microsoft.insights/components/kusto",
+                              "metricVisualization": {
+                                "displayName": "Sessions",
+                                "color": "#47BDF5"
+                              }
+                            },
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "users/count",
+                              "aggregationType": 5,
+                              "namespace": "microsoft.insights/components/kusto",
+                              "metricVisualization": {
+                                "displayName": "Users",
+                                "color": "#7E58FF"
+                              }
+                            }
+                          ],
+                          "title": "Unique sessions and users",
+                          "visualization": {
+                            "chartType": 2,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            }
+                          },
+                          "openBladeOnClick": {
+                            "openBlade": true,
+                            "destinationBlade": {
+                              "extensionName": "HubsExtension",
+                              "bladeName": "ResourceMenuBlade",
+                              "parameters": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4",
+                                "menuid": "segmentationUsers"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {}
+                }
+              },
+              {
+                "position": {
+                  "x": 4,
+                  "y": 2,
+                  "colSpan": 4,
+                  "rowSpan": 3
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "value": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "requests/failed",
+                              "aggregationType": 7,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Failed requests",
+                                "color": "#EC008C"
+                              }
+                            }
+                          ],
+                          "title": "Failed requests",
+                          "visualization": {
+                            "chartType": 3,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            }
+                          },
+                          "openBladeOnClick": {
+                            "openBlade": true,
+                            "destinationBlade": {
+                              "extensionName": "HubsExtension",
+                              "bladeName": "ResourceMenuBlade",
+                              "parameters": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4",
+                                "menuid": "failures"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {}
+                }
+              },
+              {
+                "position": {
+                  "x": 8,
+                  "y": 2,
+                  "colSpan": 4,
+                  "rowSpan": 3
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "value": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "requests/duration",
+                              "aggregationType": 4,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Server response time",
+                                "color": "#00BCF2"
+                              }
+                            }
+                          ],
+                          "title": "Server response time",
+                          "visualization": {
+                            "chartType": 2,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            }
+                          },
+                          "openBladeOnClick": {
+                            "openBlade": true,
+                            "destinationBlade": {
+                              "extensionName": "HubsExtension",
+                              "bladeName": "ResourceMenuBlade",
+                              "parameters": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4",
+                                "menuid": "performance"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {}
+                }
+              },
+              {
+                "position": {
+                  "x": 12,
+                  "y": 2,
+                  "colSpan": 4,
+                  "rowSpan": 3
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "value": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "browserTimings/networkDuration",
+                              "aggregationType": 4,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Page load network connect time",
+                                "color": "#7E58FF"
+                              }
+                            },
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "browserTimings/processingDuration",
+                              "aggregationType": 4,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Client processing time",
+                                "color": "#44F1C8"
+                              }
+                            },
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "browserTimings/sendDuration",
+                              "aggregationType": 4,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Send request time",
+                                "color": "#EB9371"
+                              }
+                            },
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "browserTimings/receiveDuration",
+                              "aggregationType": 4,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Receiving response time",
+                                "color": "#0672F1"
+                              }
+                            }
+                          ],
+                          "title": "Average page load time breakdown",
+                          "visualization": {
+                            "chartType": 3,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {}
+                }
+              },
+              {
+                "position": {
+                  "x": 0,
+                  "y": 5,
+                  "colSpan": 4,
+                  "rowSpan": 3
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "value": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "availabilityResults/availabilityPercentage",
+                              "aggregationType": 4,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Availability",
+                                "color": "#47BDF5"
+                              }
+                            }
+                          ],
+                          "title": "Average availability",
+                          "visualization": {
+                            "chartType": 3,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            }
+                          },
+                          "openBladeOnClick": {
+                            "openBlade": true,
+                            "destinationBlade": {
+                              "extensionName": "HubsExtension",
+                              "bladeName": "ResourceMenuBlade",
+                              "parameters": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4",
+                                "menuid": "availability"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {}
+                }
+              },
+              {
+                "position": {
+                  "x": 4,
+                  "y": 5,
+                  "colSpan": 4,
+                  "rowSpan": 3
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "value": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "exceptions/server",
+                              "aggregationType": 7,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Server exceptions",
+                                "color": "#47BDF5"
+                              }
+                            },
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "dependencies/failed",
+                              "aggregationType": 7,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Dependency failures",
+                                "color": "#7E58FF"
+                              }
+                            }
+                          ],
+                          "title": "Server exceptions and Dependency failures",
+                          "visualization": {
+                            "chartType": 2,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {}
+                }
+              },
+              {
+                "position": {
+                  "x": 8,
+                  "y": 5,
+                  "colSpan": 4,
+                  "rowSpan": 3
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "value": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "performanceCounters/processorCpuPercentage",
+                              "aggregationType": 4,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Processor time",
+                                "color": "#47BDF5"
+                              }
+                            },
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "performanceCounters/processCpuPercentage",
+                              "aggregationType": 4,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Process CPU",
+                                "color": "#7E58FF"
+                              }
+                            }
+                          ],
+                          "title": "Average processor and process CPU utilization",
+                          "visualization": {
+                            "chartType": 2,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {}
+                }
+              },
+              {
+                "position": {
+                  "x": 12,
+                  "y": 5,
+                  "colSpan": 4,
+                  "rowSpan": 3
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "value": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "exceptions/browser",
+                              "aggregationType": 7,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Browser exceptions",
+                                "color": "#47BDF5"
+                              }
+                            }
+                          ],
+                          "title": "Browser exceptions",
+                          "visualization": {
+                            "chartType": 2,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {}
+                }
+              },
+              {
+                "position": {
+                  "x": 0,
+                  "y": 8,
+                  "colSpan": 4,
+                  "rowSpan": 3
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "value": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "availabilityResults/count",
+                              "aggregationType": 7,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Availability test results count",
+                                "color": "#47BDF5"
+                              }
+                            }
+                          ],
+                          "title": "Availability test results count",
+                          "visualization": {
+                            "chartType": 2,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {}
+                }
+              },
+              {
+                "position": {
+                  "x": 4,
+                  "y": 8,
+                  "colSpan": 4,
+                  "rowSpan": 3
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "value": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "performanceCounters/processIOBytesPerSecond",
+                              "aggregationType": 4,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Process IO rate",
+                                "color": "#47BDF5"
+                              }
+                            }
+                          ],
+                          "title": "Average process I/O rate",
+                          "visualization": {
+                            "chartType": 2,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {}
+                }
+              },
+              {
+                "position": {
+                  "x": 8,
+                  "y": 8,
+                  "colSpan": 4,
+                  "rowSpan": 3
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "value": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4"
+                              },
+                              "name": "performanceCounters/memoryAvailableBytes",
+                              "aggregationType": 4,
+                              "namespace": "microsoft.insights/components",
+                              "metricVisualization": {
+                                "displayName": "Available memory",
+                                "color": "#47BDF5"
+                              }
+                            }
+                          ],
+                          "title": "Average available memory",
+                          "visualization": {
+                            "chartType": 2,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {}
+                }
+              }
+            ]
+          }
+        ],
+        "metadata": null
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ContainerRegistry/registries/cr4kz4cqrdguio4",
+      "type": "Microsoft.ContainerRegistry/registries",
+      "name": "cr4kz4cqrdguio4",
+      "apiVersion": "2023-06-01-preview",
+      "location": "swedencentral",
+      "sku": {
+        "name": "Basic"
+      },
+      "tags": {
+        "azd-env-name": "salesvoice-apr2026",
+        "SecurityControl": "Ignore"
+      },
+      "properties": {
+        "anonymousPullEnabled": false,
+        "adminUserEnabled": false,
+        "encryption": null,
+        "policies": {
+          "azureADAuthenticationAsArmPolicy": {
+            "status": "enabled"
+          },
+          "exportPolicy": null,
+          "quarantinePolicy": {
+            "status": "disabled"
+          },
+          "trustPolicy": {
+            "type": "Notary",
+            "status": "disabled"
+          },
+          "retentionPolicy": null,
+          "softDeletePolicy": {
+            "retentionDays": 7,
+            "status": "disabled"
+          }
+        },
+        "dataEndpointEnabled": false,
+        "publicNetworkAccess": "Enabled",
+        "networkRuleBypassOptions": "AzureServices",
+        "networkRuleSet": null,
+        "zoneRedundancy": null
+      }
+    },
+    {
+      "id": "[CONCAT('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ContainerRegistry/registries/cr4kz4cqrdguio4/providers/', concat('Microsoft.Authorization/roleAssignments/', guid('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ContainerRegistry/registries/cr4kz4cqrdguio4', reference('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-voicelab-4kz4cqrdguio4', '2023-01-31').principalId, '/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/providers/Microsoft.Authorization/roleDefinitions/7f951dda-4ed3-4680-a7ca-43fe172d538d')))]",
+      "type": "Microsoft.Authorization/roleAssignments",
+      "name": "[guid('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ContainerRegistry/registries/cr4kz4cqrdguio4', reference('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-voicelab-4kz4cqrdguio4', '2023-01-31').principalId, '/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/providers/Microsoft.Authorization/roleDefinitions/7f951dda-4ed3-4680-a7ca-43fe172d538d')]",
+      "apiVersion": "2022-04-01",
+      "properties": {
+        "roleDefinitionId": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/providers/Microsoft.Authorization/roleDefinitions/7f951dda-4ed3-4680-a7ca-43fe172d538d",
+        "principalId": "[reference('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-voicelab-4kz4cqrdguio4', '2023-01-31').principalId]",
+        "description": null,
+        "principalType": "ServicePrincipal",
+        "condition": null,
+        "conditionVersion": null,
+        "delegatedManagedIdentityResourceId": null
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.App/managedEnvironments/cae-4kz4cqrdguio4",
+      "type": "Microsoft.App/managedEnvironments",
+      "name": "cae-4kz4cqrdguio4",
+      "apiVersion": "2023-05-01",
+      "location": "swedencentral",
+      "properties": {
+        "appLogsConfiguration": {
+          "destination": "log-analytics",
+          "logAnalyticsConfiguration": {
+            "customerId": "[reference('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.OperationalInsights/workspaces/log-4kz4cqrdguio4', '2021-06-01').customerId]",
+            "sharedKey": "[listKeys('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.OperationalInsights/workspaces/log-4kz4cqrdguio4', '2021-06-01').primarySharedKey]"
+          }
+        },
+        "daprAIConnectionString": "",
+        "daprAIInstrumentationKey": "",
+        "customDomainConfiguration": {
+          "certificatePassword": "",
+          "certificateValue": null,
+          "dnsSuffix": ""
+        },
+        "vnetConfiguration": {
+          "internal": false,
+          "infrastructureSubnetId": null,
+          "dockerBridgeCidr": null,
+          "platformReservedCidr": null,
+          "platformReservedDnsIP": null
+        },
+        "workloadProfiles": null,
+        "zoneRedundant": false,
+        "infrastructureResourceGroup": "ME_cae-4kz4cqrdguio4"
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.App/containerApps/voicelab",
+      "type": "Microsoft.App/containerApps",
+      "name": "voicelab",
+      "apiVersion": "2023-05-01",
+      "location": "swedencentral",
+      "identity": {
+        "type": "UserAssigned",
+        "userAssignedIdentities": {
+          "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-voicelab-4kz4cqrdguio4": {}
+        }
+      },
+      "tags": {
+        "azd-env-name": "salesvoice-apr2026",
+        "SecurityControl": "Ignore",
+        "azd-service-name": "voicelab"
+      },
+      "properties": {
+        "environmentId": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.App/managedEnvironments/cae-4kz4cqrdguio4",
+        "configuration": {
+          "activeRevisionsMode": "Single",
+          "dapr": null,
+          "ingress": {
+            "allowInsecure": true,
+            "customDomains": null,
+            "corsPolicy": null,
+            "clientCertificateMode": "ignore",
+            "exposedPort": 0,
+            "external": true,
+            "ipSecurityRestrictions": null,
+            "targetPort": 8000,
+            "stickySessions": {
+              "affinity": "none"
+            },
+            "traffic": [
+              {
+                "label": "label-1",
+                "latestRevision": true,
+                "revisionName": "",
+                "weight": 100
+              }
+            ],
+            "transport": "http"
+          },
+          "maxInactiveRevisions": 0,
+          "registries": [
+            {
+              "server": "[reference('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ContainerRegistry/registries/cr4kz4cqrdguio4', '2019-05-01').loginServer]",
+              "identity": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-voicelab-4kz4cqrdguio4"
+            }
+          ],
+          "secrets": []
+        },
+        "template": {
+          "containers": [
+            {
+              "image": "[coalesce(tryGet(tryGet(reference('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.App/containerApps/voicelab', '2023-05-02-preview').template.containers, 0), 'image'), 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest')]",
+              "name": "main",
+              "resources": {
+                "cpu": 2.0,
+                "memory": "4.0Gi"
+              },
+              "env": [
+                {
+                  "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                  "value": "[reference('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Insights/components/appi-4kz4cqrdguio4', '2020-02-02').ConnectionString]"
+                },
+                {
+                  "name": "AZURE_CLIENT_ID",
+                  "value": "[reference('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-voicelab-4kz4cqrdguio4', '2023-01-31').clientId]"
+                },
+                {
+                  "name": "AZURE_OPENAI_ENDPOINT",
+                  "value": "[reference('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.CognitiveServices/accounts/aifoundry-voicelab-4kz4cqrdguio4', '2024-10-01').endpoint]"
+                },
+                {
+                  "name": "PROJECT_ENDPOINT",
+                  "value": "[format('{0}api/projects/default-project', reference('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.CognitiveServices/accounts/aifoundry-voicelab-4kz4cqrdguio4', '2024-10-01').endpoint)]"
+                },
+                {
+                  "name": "MODEL_DEPLOYMENT_NAME",
+                  "value": "gpt-5.4"
+                },
+                {
+                  "name": "AZURE_SPEECH_REGION",
+                  "value": "swedencentral"
+                },
+                {
+                  "name": "AZURE_AI_RESOURCE_NAME",
+                  "value": "aifoundry-voicelab-4kz4cqrdguio4"
+                },
+                {
+                  "name": "AZURE_AI_REGION",
+                  "value": "swedencentral"
+                },
+                {
+                  "name": "SUBSCRIPTION_ID",
+                  "value": "f865c43e-c809-42fb-ba6c-09909427b778"
+                },
+                {
+                  "name": "RESOURCE_GROUP_NAME",
+                  "value": "rg-salesvoice-apr2026"
+                },
+                {
+                  "name": "USE_AZURE_AI_AGENTS",
+                  "value": "false"
+                },
+                {
+                  "name": "PORT",
+                  "value": "8000"
+                },
+                {
+                  "name": "HOST",
+                  "value": "0.0.0.0"
+                }
+              ]
+            }
+          ],
+          "initContainers": null,
+          "revisionSuffix": "",
+          "scale": {
+            "maxReplicas": 10,
+            "minReplicas": 1,
+            "rules": null
+          },
+          "volumes": null
+        },
+        "workloadProfileName": ""
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Authorization/roleAssignments/acac88da-bff7-5314-8caf-06dd2d0c5465",
+      "type": "Microsoft.Authorization/roleAssignments",
+      "name": "acac88da-bff7-5314-8caf-06dd2d0c5465",
+      "apiVersion": "2022-04-01",
+      "properties": {
+        "principalId": "[reference('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-voicelab-4kz4cqrdguio4', '2023-01-31').principalId]",
+        "principalType": "ServicePrincipal",
+        "roleDefinitionId": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Authorization/roleDefinitions/64702f94-c441-49e6-a78b-ef80e0188fee"
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Authorization/roleAssignments/f082ab49-b975-5438-b957-e0f8906fde2e",
+      "type": "Microsoft.Authorization/roleAssignments",
+      "name": "f082ab49-b975-5438-b957-e0f8906fde2e",
+      "apiVersion": "2022-04-01",
+      "properties": {
+        "principalId": "[reference('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-voicelab-4kz4cqrdguio4', '2023-01-31').principalId]",
+        "principalType": "ServicePrincipal",
+        "roleDefinitionId": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Authorization/roleDefinitions/a97b65f3-24c7-4388-baec-2e87135dc908"
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Authorization/roleAssignments/0e470d8b-1e9e-524c-80d3-a19e9d15616e",
+      "type": "Microsoft.Authorization/roleAssignments",
+      "name": "0e470d8b-1e9e-524c-80d3-a19e9d15616e",
+      "apiVersion": "2022-04-01",
+      "properties": {
+        "principalId": "[reference('/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-voicelab-4kz4cqrdguio4', '2023-01-31').principalId]",
+        "principalType": "ServicePrincipal",
+        "roleDefinitionId": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Authorization/roleDefinitions/5e0bd9bd-7b93-4f28-af87-19fc36ad61bd"
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Authorization/roleAssignments/04265452-8ff5-52a4-8621-8a02c2c0c202",
+      "type": "Microsoft.Authorization/roleAssignments",
+      "name": "04265452-8ff5-52a4-8621-8a02c2c0c202",
+      "apiVersion": "2022-04-01",
+      "properties": {
+        "principalId": "6d2ecf25-91a8-4d98-aa01-d0e14ef9f38e",
+        "principalType": "User",
+        "roleDefinitionId": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Authorization/roleDefinitions/64702f94-c441-49e6-a78b-ef80e0188fee"
+      }
+    },
+    {
+      "id": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Authorization/roleAssignments/e8041a74-2bf9-5ba0-90d5-d9e565dc0caf",
+      "type": "Microsoft.Authorization/roleAssignments",
+      "name": "e8041a74-2bf9-5ba0-90d5-d9e565dc0caf",
+      "apiVersion": "2022-04-01",
+      "properties": {
+        "principalId": "6d2ecf25-91a8-4d98-aa01-d0e14ef9f38e",
+        "principalType": "User",
+        "roleDefinitionId": "/subscriptions/f865c43e-c809-42fb-ba6c-09909427b778/resourceGroups/rg-salesvoice-apr2026/providers/Microsoft.Authorization/roleDefinitions/5e0bd9bd-7b93-4f28-af87-19fc36ad61bd"
+      }
+    }
+  ],
+  "diagnostics": []
+}

@@ -4,25 +4,27 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  Dialog,
-  DialogSurface,
-  DialogTitle,
-  DialogBody,
-  DialogActions,
-  Button,
-  Card,
-  CardHeader,
-  Text,
-  ProgressBar,
-  Badge,
-  makeStyles,
-  tokens,
-  TabList,
-  Tab,
-  TabValue,
+    Badge,
+    Button,
+    Card,
+    CardHeader,
+    Dialog,
+    DialogActions,
+    DialogBody,
+    DialogSurface,
+    DialogTitle,
+    Input,
+    Label,
+    makeStyles,
+    ProgressBar,
+    Tab,
+    TabList,
+    TabValue,
+    Text,
+    tokens,
 } from '@fluentui/react-components'
-import { Assessment } from '../types'
 import { useState } from 'react'
+import { Assessment } from '../types'
 
 const useStyles = makeStyles({
   dialogBody: {
@@ -147,6 +149,7 @@ interface Props {
 export function AssessmentPanel({ open, assessment, onClose }: Props) {
   const styles = useStyles()
   const [tab, setTab] = useState<TabValue>('overview')
+  const [participantName, setParticipantName] = useState('')
 
   if (!assessment) return null
 
@@ -156,6 +159,141 @@ export function AssessmentPanel({ open, assessment, onClose }: Props) {
     return 'danger'
   }
 
+  const handlePrint = () => {
+    const a = assessment
+    const scoreLabel =
+      a.ai_assessment?.overall_score != null
+        ? a.ai_assessment.overall_score >= 80
+          ? 'Great'
+          : a.ai_assessment.overall_score >= 60
+            ? 'Good'
+            : 'Needs Work'
+        : ''
+
+    const renderList = (items: string[], emptyMsg: string) =>
+      items.length > 0
+        ? items.map((item) => `<li>${item}</li>`).join('')
+        : `<li><em>${emptyMsg}</em></li>`
+
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Performance Assessment</title>
+  <style>
+    body { font-family: Segoe UI, Arial, sans-serif; margin: 32px; color: #111; }
+    h1 { font-size: 24px; margin-bottom: 4px; }
+    .participant { font-size: 16px; color: #555; margin-bottom: 8px; }
+    h2 { font-size: 18px; border-bottom: 2px solid #ccc; padding-bottom: 4px; margin-top: 24px; }
+    h3 { font-size: 15px; margin-bottom: 4px; color: #444; }
+    .score { font-size: 48px; font-weight: 700; }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 13px; font-weight: 600; background: #e0e0e0; margin-left: 8px; }
+    .metric { margin-bottom: 12px; }
+    .metric-row { display: flex; justify-content: space-between; }
+    progress { width: 100%; height: 8px; }
+    ul { padding-left: 20px; }
+    li { margin-bottom: 6px; line-height: 1.5; }
+    .section { margin-bottom: 20px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media print { body { margin: 16px; } }
+  </style>
+</head>
+<body>
+  <h1>Performance Assessment</h1>
+  ${participantName ? `<p class="participant">Participant: <strong>${participantName}</strong></p>` : ''}
+  ${
+    a.ai_assessment
+      ? `<div><span class="score">${a.ai_assessment.overall_score}</span><span class="badge">${scoreLabel}</span></div>
+         <progress value="${a.ai_assessment.overall_score}" max="100"></progress>`
+      : ''
+  }
+
+  <h2>Overview</h2>
+  <div class="grid">
+    ${
+      a.ai_assessment
+        ? `<div>
+            <h3>🎯 AI Sales Assessment</h3>
+            <h4>Speaking Tone &amp; Style (${a.ai_assessment.speaking_tone_style.total}/30)</h4>
+            <div class="metric">
+              <div class="metric-row"><span>Professional Tone</span><span>${a.ai_assessment.speaking_tone_style.professional_tone}/10</span></div>
+              <progress value="${a.ai_assessment.speaking_tone_style.professional_tone}" max="10"></progress>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Active Listening</span><span>${a.ai_assessment.speaking_tone_style.active_listening}/10</span></div>
+              <progress value="${a.ai_assessment.speaking_tone_style.active_listening}" max="10"></progress>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Engagement Quality</span><span>${a.ai_assessment.speaking_tone_style.engagement_quality}/10</span></div>
+              <progress value="${a.ai_assessment.speaking_tone_style.engagement_quality}" max="10"></progress>
+            </div>
+            <h4>Content Quality (${a.ai_assessment.conversation_content.total}/70)</h4>
+            <div class="metric">
+              <div class="metric-row"><span>Needs Assessment</span><span>${a.ai_assessment.conversation_content.needs_assessment}/25</span></div>
+              <progress value="${a.ai_assessment.conversation_content.needs_assessment}" max="25"></progress>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Value Proposition</span><span>${a.ai_assessment.conversation_content.value_proposition}/25</span></div>
+              <progress value="${a.ai_assessment.conversation_content.value_proposition}" max="25"></progress>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Objection Handling</span><span>${a.ai_assessment.conversation_content.objection_handling}/20</span></div>
+              <progress value="${a.ai_assessment.conversation_content.objection_handling}" max="20"></progress>
+            </div>
+           </div>`
+        : ''
+    }
+    ${
+      a.pronunciation_assessment
+        ? `<div>
+            <h3>🗣️ Pronunciation Assessment</h3>
+            <div class="metric">
+              <div class="metric-row"><span>Accuracy</span><span>${a.pronunciation_assessment.accuracy_score.toFixed(1)}</span></div>
+              <progress value="${a.pronunciation_assessment.accuracy_score}" max="100"></progress>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Fluency</span><span>${a.pronunciation_assessment.fluency_score.toFixed(1)}</span></div>
+              <progress value="${a.pronunciation_assessment.fluency_score}" max="100"></progress>
+            </div>
+            ${
+              a.pronunciation_assessment.words && a.pronunciation_assessment.words.length > 0
+                ? `<h4>Word-Level Analysis</h4><p>${a.pronunciation_assessment.words.slice(0, 12).map((w) => `${w.word} (${w.accuracy}%)`).join(', ')}</p>`
+                : ''
+            }
+           </div>`
+        : ''
+    }
+  </div>
+
+  ${
+    a.ai_assessment
+      ? `<h2>Recommendations</h2>
+         <div class="section">
+           <h3>Strengths</h3>
+           <ul>${renderList(a.ai_assessment.strengths, 'No specific strengths identified in this session.')}</ul>
+         </div>
+         <div class="section">
+           <h3>Areas for Improvement</h3>
+           <ul>${renderList(a.ai_assessment.improvements, 'No specific areas for improvement identified.')}</ul>
+         </div>`
+      : ''
+  }
+
+  <h2>Evaluator Notes</h2>
+  <p>${a.ai_assessment?.specific_feedback || 'No evaluator notes available.'}</p>
+</body>
+</html>`
+
+    const win = window.open('', '_blank')
+    if (win) {
+      win.document.write(html)
+      win.document.close()
+      win.focus()
+      win.print()
+    }
+  }
+
   return (
     <Dialog open={open} onOpenChange={(_, data) => !data.open && onClose()}>
       <DialogSurface
@@ -163,6 +301,17 @@ export function AssessmentPanel({ open, assessment, onClose }: Props) {
       >
         <DialogTitle>Performance Assessment</DialogTitle>
         <DialogBody className={styles.dialogBody}>
+          {/* Participant Name */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacingHorizontalM }}>
+            <Label htmlFor="participant-name">Participant name</Label>
+            <Input
+              id="participant-name"
+              placeholder="Enter name for printed report"
+              value={participantName}
+              onChange={(_, data) => setParticipantName(data.value)}
+              style={{ flex: 1 }}
+            />
+          </div>
           {/* Overall Score Section */}
           {assessment.ai_assessment && (
             <div className={styles.headerBar}>
@@ -511,6 +660,9 @@ export function AssessmentPanel({ open, assessment, onClose }: Props) {
           )}
         </DialogBody>
         <DialogActions>
+          <Button appearance="secondary" onClick={handlePrint}>
+            🖨️ Print
+          </Button>
           <Button appearance="primary" onClick={onClose}>
             Close
           </Button>
