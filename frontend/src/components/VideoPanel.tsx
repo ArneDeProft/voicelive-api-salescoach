@@ -8,12 +8,16 @@ import React from 'react'
 
 const useStyles = makeStyles({
   card: {
-    width: '400px',
-    height: '100%',
+    width: '100%',
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: tokens.spacingVerticalM,
   },
   videoContainer: {
-    width: '100%',
+    width: '50%',
+    maxWidth: '480px',
     aspectRatio: '3 / 4',
     backgroundColor: tokens.colorNeutralBackground1,
     borderRadius: tokens.borderRadiusMedium,

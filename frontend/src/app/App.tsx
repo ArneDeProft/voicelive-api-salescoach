@@ -4,13 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  Dialog,
-  DialogBody,
-  DialogSurface,
-  Spinner,
-  Text,
-  makeStyles,
-  tokens,
+    Dialog,
+    DialogBody,
+    DialogSurface,
+    Spinner,
+    Text,
+    makeStyles,
+    tokens,
 } from '@fluentui/react-components'
 import { useCallback, useState } from 'react'
 import { AssessmentPanel } from '../components/AssessmentPanel'
@@ -40,7 +40,8 @@ const useStyles = makeStyles({
     maxWidth: '1400px',
     height: '90vh',
     display: 'flex',
-    gap: tokens.spacingHorizontalL,
+    flexDirection: 'column',
+    gap: tokens.spacingVerticalM,
   },
   setupDialog: {
     maxWidth: '600px',

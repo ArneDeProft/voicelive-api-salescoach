@@ -4,26 +4,28 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  Card,
   Button,
+  Card,
   Text,
   makeStyles,
   tokens,
 } from '@fluentui/react-components'
 import {
-  MicRegular,
-  MicOffRegular,
-  DeleteRegular,
   ChartMultipleRegular,
+  DeleteRegular,
+  MicOffRegular,
+  MicRegular,
 } from '@fluentui/react-icons'
 import { Message, Scenario } from '../types'
 
 const useStyles = makeStyles({
   card: {
-    flex: 1,
+    width: '100%',
+    flexShrink: 0,
     display: 'flex',
     flexDirection: 'column',
-    padding: tokens.spacingVerticalM,
+    padding: tokens.spacingVerticalS,
+    maxHeight: '520px',
   },
   header: {
     marginBottom: tokens.spacingVerticalM,
@@ -37,10 +39,11 @@ const useStyles = makeStyles({
   messages: {
     flex: 1,
     overflowY: 'auto',
+    maxHeight: '260px',
     border: `1px solid ${tokens.colorNeutralStroke1}`,
     borderRadius: tokens.borderRadiusMedium,
-    padding: tokens.spacingVerticalM,
-    marginBottom: tokens.spacingVerticalM,
+    padding: tokens.spacingVerticalS,
+    marginBottom: tokens.spacingVerticalS,
   },
   placeholder: {
     height: '100%',
