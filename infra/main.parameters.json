@@ -19,6 +19,9 @@
       },
       "useFoundryAgents": {
         "value": false
+      },
+      "foundryLocation": {
+        "value": "${AZURE_FOUNDRY_LOCATION}"
       }
     }
 }

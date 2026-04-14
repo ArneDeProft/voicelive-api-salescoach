@@ -3,15 +3,18 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export function useWebRTC(onSendOffer: (sdp: string) => void) {
   const pcRef = useRef<RTCPeerConnection | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const audioElementsRef = useRef<HTMLAudioElement[]>([])
+  const [avatarReady, setAvatarReady] = useState(false)
 
   const setupWebRTC = useCallback(
     async (iceServers: any, username?: string, password?: string) => {
+      setAvatarReady(false)
+
       // Clear any pending ICE gathering timeout from a previous connection
       if (gatheringTimeoutRef.current) {
         clearTimeout(gatheringTimeoutRef.current)
@@ -74,6 +77,12 @@ export function useWebRTC(onSendOffer: (sdp: string) => void) {
       pc.ontrack = e => {
         if (e.track.kind === 'video' && videoRef.current) {
           videoRef.current.srcObject = e.streams[0]
+          const onPlaying = () => {
+            console.log('Video is playing, avatar is ready')
+            setAvatarReady(true)
+            videoRef.current?.removeEventListener('playing', onPlaying)
+          }
+          videoRef.current.addEventListener('playing', onPlaying)
           videoRef.current.play()
         } else if (e.track.kind === 'audio') {
           const audio = document.createElement('audio')
@@ -127,5 +136,6 @@ export function useWebRTC(onSendOffer: (sdp: string) => void) {
     setupWebRTC,
     handleAnswer,
     videoRef,
+    avatarReady,
   }
 }

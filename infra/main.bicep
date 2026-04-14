@@ -9,6 +9,9 @@ param environmentName string
 @description('Primary location for all resources')
 param location string
 
+@description('Location for the AI Foundry resource (defaults to primary location)')
+param foundryLocation string = location
+
 
 param voicelabExists bool
 
@@ -41,6 +44,7 @@ module resources 'resources.bicep' = {
   name: 'resources'
   params: {
     location: location
+    foundryLocation: foundryLocation
     tags: tags
     principalId: principalId
     principalType: principalType

@@ -4,15 +4,20 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-    Dialog,
-    DialogBody,
-    DialogSurface,
-    Spinner,
-    Text,
-    makeStyles,
-    tokens,
+  Dialog,
+  DialogBody,
+  DialogSurface,
+  makeStyles,
+  Spinner,
+  Text,
+  Toast,
+  Toaster,
+  ToastTitle,
+  tokens,
+  useId,
+  useToastController,
 } from '@fluentui/react-components'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { AssessmentPanel } from '../components/AssessmentPanel'
 import { ChatPanel } from '../components/ChatPanel'
 import { ScenarioList } from '../components/ScenarioList'
@@ -128,7 +133,21 @@ export default function App() {
     [send]
   )
 
-  const { setupWebRTC, handleAnswer, videoRef } = useWebRTC(sendOffer)
+  const { setupWebRTC, handleAnswer, videoRef, avatarReady } = useWebRTC(sendOffer)
+
+  const toasterId = useId('toaster')
+  const { dispatchToast } = useToastController(toasterId)
+
+  useEffect(() => {
+    if (avatarReady) {
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Avatar ready</ToastTitle>
+        </Toast>,
+        { intent: 'success', timeout: 3000 }
+      )
+    }
+  }, [avatarReady])
 
   const sendAudioChunk = useCallback(
     (base64: string) => {
@@ -204,6 +223,7 @@ export default function App() {
 
   return (
     <div className={styles.container}>
+      <Toaster toasterId={toasterId} position="top-end" />
       <Dialog
         open={showSetup}
         onOpenChange={(_, data) => setShowSetup(data.open)}
@@ -268,6 +288,7 @@ export default function App() {
             recording={recording}
             connected={connected}
             canAnalyze={messages.length > 0}
+            avatarReady={avatarReady}
             onToggleRecording={toggleRecording}
             onClear={clearMessages}
             onAnalyze={handleAnalyze}

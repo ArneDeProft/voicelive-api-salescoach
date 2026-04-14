@@ -12,9 +12,8 @@ import {
 } from '@fluentui/react-components'
 import {
   ChartMultipleRegular,
-  DeleteRegular,
   MicOffRegular,
-  MicRegular,
+  MicRegular
 } from '@fluentui/react-icons'
 import { Message, Scenario } from '../types'
 
@@ -84,6 +83,7 @@ interface Props {
   recording: boolean
   connected: boolean
   canAnalyze: boolean
+  avatarReady: boolean
   onToggleRecording: () => void
   onClear: () => void
   onAnalyze: () => void
@@ -95,6 +95,7 @@ export function ChatPanel({
   recording,
   connected: _connected,
   canAnalyze,
+  avatarReady,
   onToggleRecording,
   onClear,
   onAnalyze,
@@ -122,7 +123,7 @@ export function ChatPanel({
               Get started
             </Text>
             <Text size={200}>
-              Click "Start Recording" to begin the conversation.
+              Click "Start Training" to begin the conversation.
             </Text>
           </div>
         ) : (
@@ -151,13 +152,14 @@ export function ChatPanel({
           appearance={recording ? 'primary' : 'secondary'}
           icon={recording ? <MicOffRegular /> : <MicRegular />}
           onClick={onToggleRecording}
+          disabled={!avatarReady}
         >
-          {recording ? 'Stop Recording' : 'Start Recording'}
+          {recording ? 'Stop Training' : 'Start Training'}
         </Button>
 
-        <Button appearance="subtle" icon={<DeleteRegular />} onClick={onClear}>
+        {/* <Button appearance="subtle" icon={<DeleteRegular />} onClick={onClear}>
           Clear
-        </Button>
+        </Button> */}
 
         <Button
           appearance="primary"
