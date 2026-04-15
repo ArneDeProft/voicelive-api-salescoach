@@ -202,7 +202,7 @@ class VoiceProxyHandler:
 
         avatar_config_value = self._build_avatar_config(avatar_character, avatar_style, is_photo_avatar, is_custom_avatar)
 
-        return self._create_request_session(voice_name, voice_type, avatar_config_value, agent_config)
+        return self._create_request_session(voice_name, voice_type, avatar_config_value, agent_config, avatar_character)
 
     def _build_avatar_config(self, character: str, style: str, is_photo: bool, is_custom: bool = False) -> Any:
         """Build avatar configuration for photo or video avatars."""
@@ -225,15 +225,22 @@ class VoiceProxyHandler:
         voice_type: str,
         avatar_config_value: Any,
         agent_config: Optional[Dict[str, Any]],
+        avatar_character: str = "",
     ) -> RequestSession:
         """Create the RequestSession with all configuration."""
+        if "arne" in avatar_character.lower():
+          #  voice: AzurePersonalVoice | AzureStandardVoice = AzurePersonalVoice(name="ArnePersonalVoiceApril26", model="DragonLatestNeural", rate=1.3)
+            voice: AzurePersonalVoice | AzureStandardVoice = AzurePersonalVoice(name="ArnePersonalVoiceApril26", model="DragonLatestNeural")
+
+        else:
+            voice = AzureStandardVoice(name=voice_name, type=voice_type)
+
         session = RequestSession(
             modalities=[Modality.TEXT, Modality.AUDIO, Modality.AVATAR],
             turn_detection=AzureSemanticVad(type=DEFAULT_TURN_DETECTION_TYPE),
             input_audio_noise_reduction=AudioNoiseReduction(type=DEFAULT_NOISE_REDUCTION_TYPE),
             input_audio_echo_cancellation=AudioEchoCancellation(type=DEFAULT_ECHO_CANCELLATION_TYPE),
-            #voice=AzureStandardVoice(name=voice_name, type=voice_type),
-            voice=AzurePersonalVoice(name="ArnePersonalVoiceApril26", model="DragonLatestNeural"),
+            voice=voice,
             avatar=avatar_config_value,
         )
 
