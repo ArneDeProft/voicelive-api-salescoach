@@ -237,12 +237,18 @@ class VoiceProxyHandler:
 
         session = RequestSession(
             modalities=[Modality.TEXT, Modality.AUDIO, Modality.AVATAR],
-            turn_detection=AzureSemanticVad(type=DEFAULT_TURN_DETECTION_TYPE),
+            turn_detection=AzureSemanticVad(type=DEFAULT_TURN_DETECTION_TYPE, silence_duration_ms=700),
             input_audio_noise_reduction=AudioNoiseReduction(type=DEFAULT_NOISE_REDUCTION_TYPE),
             input_audio_echo_cancellation=AudioEchoCancellation(type=DEFAULT_ECHO_CANCELLATION_TYPE),
             voice=voice,
+            temperature=0.8,
             avatar=avatar_config_value,
         )
+
+        session["input_audio_transcription"] = {
+            "model": "azure-speech",
+            "language": "en-US,de-DE,fr-FR,zh-CN,ja-JP,ko-KR,es-ES,pt-BR",
+        }
 
         if agent_config and not agent_config.get("is_azure_agent"):
             session["instructions"] = agent_config.get("instructions")
