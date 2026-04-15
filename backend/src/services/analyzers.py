@@ -373,7 +373,7 @@ class PronunciationAssessor:
             credential = DefaultAzureCredential()
             token = credential.get_token("https://cognitiveservices.azure.com/.default")
             speech_config = speechsdk.SpeechConfig(auth_token=token.token, region=self.speech_region)
-        speech_config.speech_recognition_language = config["azure_speech_language"]
+      #  speech_config.speech_recognition_language = config["azure_speech_language"]
         return speech_config
 
     def _create_pronunciation_config(self, reference_text: Optional[str]) -> speechsdk.PronunciationAssessmentConfig:
@@ -472,7 +472,8 @@ class PronunciationAssessor:
         speech_recognizer = speechsdk.SpeechRecognizer(
             speech_config=speech_config,
             audio_config=audio_config,
-            language=config["azure_speech_language"],
+       #    Comment out the language for now
+       #     language=config["azure_speech_language"],
         )
         pronunciation_config.apply_to(speech_recognizer)
 

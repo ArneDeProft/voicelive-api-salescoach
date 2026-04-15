@@ -14,14 +14,20 @@ export interface AvatarConfig {
   character: string
   style: string
   is_photo_avatar: boolean
+  is_custom_avatar?: boolean
 }
 
 export function parseAvatarValue(value: string): AvatarConfig {
   const avatarOption = AVATAR_OPTIONS.find(opt => opt.value === value)
   const isPhotoAvatar = avatarOption?.isPhotoAvatar ?? false
+  const isCustomAvatar = avatarOption?.isCustomAvatar ?? false
 
   if (isPhotoAvatar) {
     return { character: value.toLowerCase(), style: '', is_photo_avatar: true }
+  }
+
+  if (isCustomAvatar) {
+    return { character: value, style: '', is_photo_avatar: false, is_custom_avatar: true }
   }
 
   const parts = value.split('-')

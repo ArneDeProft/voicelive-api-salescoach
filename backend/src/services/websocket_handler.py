@@ -23,6 +23,7 @@ from azure.ai.voicelive.models import (
     AudioEchoCancellation,
     AudioNoiseReduction,
     AvatarConfig,
+    AzurePersonalVoice,
     AzureSemanticVad,
     AzureStandardVoice,
     Modality,
@@ -190,18 +191,20 @@ class VoiceProxyHandler:
         avatar_character = config.get("azure_avatar_character", DEFAULT_AVATAR_CHARACTER)
         avatar_style = config.get("azure_avatar_style", DEFAULT_AVATAR_STYLE)
         is_photo_avatar = False
+        is_custom_avatar = False
 
         if agent_config and agent_config.get("avatar_config"):
             custom_avatar = agent_config["avatar_config"]
             avatar_character = custom_avatar.get("character", avatar_character)
             avatar_style = custom_avatar.get("style", avatar_style)
             is_photo_avatar = custom_avatar.get("is_photo_avatar", False)
+            is_custom_avatar = custom_avatar.get("is_custom_avatar", False)
 
-        avatar_config_value = self._build_avatar_config(avatar_character, avatar_style, is_photo_avatar)
+        avatar_config_value = self._build_avatar_config(avatar_character, avatar_style, is_photo_avatar, is_custom_avatar)
 
         return self._create_request_session(voice_name, voice_type, avatar_config_value, agent_config)
 
-    def _build_avatar_config(self, character: str, style: str, is_photo: bool) -> Any:
+    def _build_avatar_config(self, character: str, style: str, is_photo: bool, is_custom: bool = False) -> Any:
         """Build avatar configuration for photo or video avatars."""
         if is_photo:
             return {
@@ -213,7 +216,7 @@ class VoiceProxyHandler:
         return AvatarConfig(
             character=character,
             style=style if style else None,
-            customized=False,
+            customized=is_custom,
         )
 
     def _create_request_session(
@@ -229,7 +232,8 @@ class VoiceProxyHandler:
             turn_detection=AzureSemanticVad(type=DEFAULT_TURN_DETECTION_TYPE),
             input_audio_noise_reduction=AudioNoiseReduction(type=DEFAULT_NOISE_REDUCTION_TYPE),
             input_audio_echo_cancellation=AudioEchoCancellation(type=DEFAULT_ECHO_CANCELLATION_TYPE),
-            voice=AzureStandardVoice(name=voice_name, type=voice_type),
+            #voice=AzureStandardVoice(name=voice_name, type=voice_type),
+            voice=AzurePersonalVoice(name="ArnePersonalVoiceApril26", model="DragonLatestNeural"),
             avatar=avatar_config_value,
         )
 

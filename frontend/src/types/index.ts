@@ -67,6 +67,7 @@ export interface AvatarOption {
   value: string
   label: string
   isPhotoAvatar: boolean
+  isCustomAvatar?: boolean
 }
 
 export const AVATAR_OPTIONS: AvatarOption[] = [
@@ -77,6 +78,7 @@ export const AVATAR_OPTIONS: AvatarOption[] = [
   },
   { value: 'riya', label: 'Riya (Photo)', isPhotoAvatar: true },
   { value: 'simone', label: 'Simone (Photo)', isPhotoAvatar: true },
+  { value: 'ArneAprilV1', label: 'Arne (Custom)', isPhotoAvatar: false, isCustomAvatar: true },
 ]
 
 export const DEFAULT_AVATAR = 'lisa-casual-sitting'
