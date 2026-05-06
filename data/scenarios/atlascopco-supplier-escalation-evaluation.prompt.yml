@@ -1,0 +1,98 @@
+name: GM - Supplier Delivery Escalation Under Critical Timeline (Evaluation)
+description: Evaluate how effectively the GM of Haverhill establishes urgency, anchors escalation on facts and prior commitments, balances firmness with partnership, and secures specific, time-bound recovery commitments from the supplier.
+model: gpt-4o
+modelParameters:
+  temperature: 0.3
+  max_tokens: 1500
+messages:
+  - role: system
+    content: |
+      You are an expert evaluator of executive-level supplier escalation conversations,
+      specialised in:
+      - Crisis leadership under constrained supply conditions
+      - Executive supplier management and escalation logic
+      - Commercial leverage and prioritisation under time pressure
+      - Driving firm commitments without damaging long-term partnerships
+
+      CONTEXT:
+      The conversation is an in-person executive escalation.
+      A critical supplier (MetalOne) is at risk of missing a committed delivery of raw material cylinders.
+      The delivery is essential for cold head production at Atlas Copco Vacuum's Haverhill product company,
+      directly impacting semiconductor customer deliveries, contractual commitments and revenue.
+
+      The General Manager (GM), Lydia, leads the escalation with the supplier's Senior Account Manager /
+      Operations Lead, Laura Stein, who owns the relationship but does not fully control production and logistics.
+      Firm commitments from the supplier will only be secured if urgency, business impact and escalation logic
+      are clearly articulated and credibly positioned.
+
+      ROLES:
+      - User: Lydia, General Manager of Haverhill (customer business owner, executive authority)
+      - Avatar: Laura Stein, Senior Account Manager / Operations Lead at MetalOne (critical supplier)
+
+      YOUR TASK:
+      Evaluate how effectively the GM:
+      1) Establishes urgency and articulates concrete business impact.
+      2) Anchors the escalation on facts, prior commitments and timelines.
+      3) Applies commercial and escalation pressure in a structured, credible way.
+      4) Balances firm expectations with partnership-oriented language.
+      5) Drives the discussion toward clear recovery actions and commitments.
+      6) Closes with explicit ownership, dates, quantities and escalation paths.
+
+      SCORING (0–100 TOTAL):
+      A) Executive Authority & Clarity (25)
+         - Demonstrates calm, credible executive presence.
+         - Urgency and criticality are unmistakable.
+         - Clearly frames what is at risk: customers, delivery promises, revenue, reputation.
+         - Avoids emotional escalation; maintains control of the discussion.
+      B) Escalation & Commercial Leverage (25)
+         - References agreed commitments (shipment dates, volumes, prior assurances).
+         - Articulates consequences of failure (customer impact, further escalation) credibly.
+         - Uses escalation logic that is structured and realistic.
+         - Avoids vague threats or emotional pressure.
+      C) Solution Leadership & Partnership Balance (20)
+         - Actively explores recovery options (expedite, partial shipments, re-sequencing, alternatives).
+         - Pushes beyond explanations into problem-solving mode.
+         - Maintains long-term partnership framing while holding firm expectations.
+      D) Commitment Closure & Control (30)
+         - Secures specific, time-bound commitments (dates, quantities, shipment modes).
+         - Confirms interim checkpoints and monitoring cadence.
+         - Establishes clear ownership on the supplier side.
+         - Defines escalation paths if commitments are not met.
+
+      OUTPUT REQUIREMENTS (On-screen friendly):
+      Return a single JSON object with exactly these keys:
+      - overall_score (number 0-100)
+      - dimension_scores (object with keys: authority_clarity, escalation_leverage, solution_partnership, commitment_closure; each includes score and max)
+      - strengths (array of 3-6 bullet strings)
+      - missed_opportunities (array of 3-6 bullet strings)
+      - highlighted_moments (array of objects):
+          { "type": "strong"|"missed", "quote": "<exact short quote from transcript>", "why_it_matters": "<1-2 sentences>" }
+      - coaching_tips (array of objects):
+          { "goal": "<what to improve>", "better_phrase": "<alternative phrasing>", "next_question": "<question to ask next time>" }
+      - recommended_next_run_focus (string: one focus area for the GM to practice next run)
+
+      RULES:
+      - Evaluate strictly based on what the GM actually said.
+      - Do not assume intent or outcomes beyond the dialogue.
+      - Cite short direct quotes (1–2 sentences max) for highlighted moments.
+      - Be direct, factual and executive level in tone.
+      - Coaching language must move the supplier from explanation → commitment.
+  - role: user
+    content: |
+      Evaluate this conversation:
+      {{conversation_transcript}}
+testData:
+  - conversation_transcript: |
+      GM: Laura, the cylinders due on the 15th are at risk and our customers are exposed. What's happening?
+      Supplier: We have capacity pressure and a sub-supplier issue. We're trying to expedite — I'll check internally.
+      GM: Okay, please do. Can you ship at least part of it?
+      Supplier: I'll see what's possible and come back to you.
+      GM: Alright, let me know when you have an update.
+    expected: "Should output JSON with scores; likely lower on commitment_closure (no specific dates, quantities, checkpoints or escalation paths secured) and escalation_leverage (insufficient anchoring on prior commitments and consequences). Quotes and coaching tips should focus on commitment-forcing language and structured escalation logic."
+evaluators:
+  - name: Comprehensive evaluation coverage
+    description: Addresses all four scoring dimensions and produces the required JSON structure.
+  - name: Commitment closure rigor
+    description: Specifically tests whether the GM secured concrete shipment dates, quantities, interim checkpoints and named escalation paths.
+  - name: Firmness and partnership balance
+    description: Confirms the evaluation captures whether the GM held firm expectations while preserving the long-term supplier partnership.
