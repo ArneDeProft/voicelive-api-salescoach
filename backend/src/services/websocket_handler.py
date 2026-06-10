@@ -24,6 +24,7 @@ from azure.ai.voicelive.models import (
     AudioNoiseReduction,
     AvatarConfig,
     AzurePersonalVoice,
+   # RealtimeAzurePersonalVoice,
     AzureSemanticVad,
     AzureStandardVoice,
     Modality,
@@ -229,8 +230,15 @@ class VoiceProxyHandler:
     ) -> RequestSession:
         """Create the RequestSession with all configuration."""
         if "arne" in avatar_character.lower():
-          #  voice: AzurePersonalVoice | AzureStandardVoice = AzurePersonalVoice(name="ArnePersonalVoiceApril26", model="DragonLatestNeural", rate=1.3)
-            voice: AzurePersonalVoice | AzureStandardVoice = AzurePersonalVoice(name="ArnePersonalVoiceApril26", model="DragonLatestNeural")
+           voice: AzurePersonalVoice | AzureStandardVoice = AzurePersonalVoice(
+                   name="ArnePersonalVoiceApril26", model="DragonLatestNeural", rate="1.1"
+               )
+            #voice : RealtimeAzurePersonalVoice | AzureStandardVoice = RealtimeAzurePersonalVoice(
+            #    type="azure-custom",
+            #    name="ArnePersonalVoiceApril26",
+             #   endpoint_id=end
+        #    )
+            #voice: AzurePersonalVoice | AzureStandardVoice = AzurePersonalVoice(name="ArnePersonalVoiceApril26", model="DragonLatestNeural")
 
         else:
             voice = AzureStandardVoice(name=voice_name, type=voice_type)
