@@ -90,10 +90,14 @@ class VoiceProxyHandler:
             credential = self._get_credential()
             model = self._get_model(agent_config)
             query_params = self._build_query_params(current_agent_id, agent_config)
-
+            #print model being used:
+            logger.info("Using model: %s for agent: %s", model or "default", current_agent_id or "default")
             async with connect(
                 endpoint=endpoint,
                 credential=credential,
+                # overwrite with realtime1.5
+                #need other region for realtime 1.5
+                model="gpt-realtime-1.5",
                 model=model,
                 api_version=AZURE_VOICE_API_VERSION,
                 query=query_params,
@@ -255,7 +259,7 @@ class VoiceProxyHandler:
 
         session["input_audio_transcription"] = {
             "model": "azure-speech",
-            "language": "en-US,de-DE,fr-FR,zh-CN,ja-JP,ko-KR,es-ES,pt-BR",
+            "language": "en-US,de-DE,fr-FR,zh-CN,ja-JP,ko-KR,es-ES,pt-BR,nl-BE",
         }
 
         if agent_config and not agent_config.get("is_azure_agent"):
