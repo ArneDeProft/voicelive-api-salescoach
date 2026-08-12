@@ -25,11 +25,20 @@ param gptModelName string = 'gpt-5.4'
 param gptModelVersion string = '2026-03-05'
 param gptDeploymentName string = 'gpt-5.4'
 
+param realtimeModelName string = 'gpt-realtime-1.5'
+param realtimeModelVersion string = '2025-08-28'
+param realtimeDeploymentName string = 'gpt-realtime-1.5'
+
 param openAiModelDeployments array = [
   {
     name: gptDeploymentName
     model: gptModelName
     version: gptModelVersion
+  }
+  {
+    name: realtimeDeploymentName
+    model: realtimeModelName
+    version: realtimeModelVersion
   }
   {
     name: 'text-embedding-3-small'
